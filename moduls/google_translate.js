@@ -5,7 +5,7 @@ var get = function(text, from, to, callback){
         var result = '';
         if(res.from.text.didYouMean) {
             result = res.from.text.value;
-            if(callback) callback(result);
+            if(callback) callback(text,  result);
             //correcting
             get(res.from.text.value, from, to, (t, r) => {
                 if(callback) callback(t, r);
