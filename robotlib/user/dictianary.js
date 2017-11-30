@@ -7,7 +7,7 @@ var texttrans = function(user, text){
     var to   = (from === 'en') ? 'fa' : 'en';
 
     fn.gtranslate.get(text,from,to, (result) => {
-        var mess = '✅ ' + 'ترجمه متن: ' + '\n' + text + '\n';
+        var mess = text + '\n';
         mess += '--------------------------' + '\n';
         mess += result + '\n';
         mess += '@' + global.robot.username;
