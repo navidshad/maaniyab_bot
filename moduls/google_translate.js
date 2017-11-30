@@ -8,10 +8,9 @@ var get = function(text, from, to, callback){
                 if(callback) callback(r);
             });
         }
-        else {
-            result = res.text;
-            if(callback) callback(result);
-        }
+        else result = res.text;
+        if(callback) callback(result);
+        
         //console.log(res.text);
         //=> Ik spreek Nederlands! 
         //console.log(res.from.text.autoCorrected);
