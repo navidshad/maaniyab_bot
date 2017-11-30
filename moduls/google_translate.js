@@ -4,13 +4,17 @@ var get = function(text, from, to, callback){
     googletrans(text, {'from': from, 'to': to}).then(res => {
         var result = '';
         if(res.from.text.didYouMean) {
+            result = res.from.text.value;
+            if(callback) callback(result);
+            //correcting
             get(res.from.text.value, from, to, (r) => {
                 if(callback) callback(r);
             });
         }
-        else result = res.text;
-        if(callback) callback(result);
-        
+        else {
+            result = res.text;
+            if(callback) callback(result);
+        }
         //console.log(res.text);
         //=> Ik spreek Nederlands! 
         //console.log(res.from.text.autoCorrected);
