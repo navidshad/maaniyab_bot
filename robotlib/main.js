@@ -11,7 +11,7 @@ module.exports.create = function(){
     });
 
     //start bot
-    //newBot.start();
+    newBot.start();
     //get category list
     global.fn.category.get();
     //get main menu items

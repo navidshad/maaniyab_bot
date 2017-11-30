@@ -1,7 +1,7 @@
 var show = function(userid, newcat){
     var activationtext = '',
     moduleOption = {},
-    index = 0;
+    index = null;
     //find module option
     if(global.robot.confige.moduleOptions){
         global.robot.confige.moduleOptions.forEach(function(element, i) {

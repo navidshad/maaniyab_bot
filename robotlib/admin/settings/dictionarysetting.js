@@ -11,7 +11,7 @@ var createKeyes = function(array, user, cutindex){
     trans_word  += fn.str.moduleButtons.dictionary['trans_word'], 
     trans_text  += fn.str.moduleButtons.dictionary['trans_text'];
 
-    items.splice(cutindex, 1, to_fa, to_en); //trans_word, trans_text);
+    items.splice(0, 0, to_fa, to_en); //trans_word, trans_text);
 
     return items;
 }

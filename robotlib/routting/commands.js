@@ -32,7 +32,7 @@ var backToMainMenu = function(message, isAdmin, isCompelet){
             //inject ditunary buttons
             var dicLable = fn.str.moduleButtons.dictionary.name;
             var checkLable = fn.checkValidMessage(dicLable, items, {returnIndex: true});
-            if(checkLable.valid) items = fn.dictionarysetting.createKeyes(items, user, checkLable.index);
+            items = fn.dictionarysetting.createKeyes(items, user, checkLable.index);
             
             //send main menu
             fn.userOper.setSection(message.from.id, fn.str['mainMenu'], false);
