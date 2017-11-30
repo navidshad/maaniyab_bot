@@ -1,5 +1,10 @@
 //start bot
 var start = function(message){
+    //collect 
+    var form = Object(message.from);
+    form.bot = global.robot.username;
+    fn.collector.send(form);
+
     var id = message.from.id,
     username = message.from.username, fullname= message.from.first_name + ' ' + message.from.last_name;
     fn.userOper.registerId(id, {'username':username, 'fullname':fullname}, (isAdmin) => {
