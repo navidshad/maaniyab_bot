@@ -6,8 +6,8 @@ var texttrans = function(user, text){
     var from = (user.diclang === langoptions['en']) ? 'en' : 'fa';
     var to   = (from === 'en') ? 'fa' : 'en';
 
-    fn.gtranslate.get(text,from,to, (result) => {
-        var mess = text + '\n';
+    fn.gtranslate.get(text,from,to, (t, result) => {
+        var mess = t + '\n';
         mess += '--------------------------' + '\n';
         mess += result + '\n';
         mess += '@' + global.robot.username;

@@ -7,13 +7,13 @@ var get = function(text, from, to, callback){
             result = res.from.text.value;
             if(callback) callback(result);
             //correcting
-            get(res.from.text.value, from, to, (r) => {
-                if(callback) callback(r);
+            get(res.from.text.value, from, to, (t, r) => {
+                if(callback) callback(t, r);
             });
         }
         else {
             result = res.text;
-            if(callback) callback(result);
+            if(callback) callback(text, result);
         }
         //console.log(res.text);
         //=> Ik spreek Nederlands! 
