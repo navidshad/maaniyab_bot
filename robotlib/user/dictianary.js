@@ -1,0 +1,34 @@
+var texttrans = function(user, text){
+    var langoptions = {
+        'fa': fn.str.moduleButtons.dictionary.to_en.toString(),
+        'en': fn.str.moduleButtons.dictionary.to_fa.toString(),
+    }
+    var from = (user.diclang === langoptions['en']) ? 'en' : 'fa';
+    var to   = (from === 'en') ? 'fa' : 'en';
+
+    fn.gtranslate.get(text,from,to, (result) => {
+        var mess = '✅ ' + 'ترجمه متن: ' + '\n' + text + '\n';
+        mess += '--------------------------' + '\n';
+        mess += result + '\n';
+        mess += '@' + global.robot.username;
+        global.robot.bot.sendMessage(user.userId, mess);
+    });
+}
+
+var wordTrans = function(user,text){}
+
+var translate = function(message){
+    fn.db.user.findOne({'userId': message.from.id}, 'userId diclang dictype').exec((e, user) => {
+        switch (user.dictype) {
+            case fn.str.moduleButtons.dictionary['trans_word']:
+                wordTrans(user, message.text);
+                break;
+            case fn.str.moduleButtons.dictionary['trans_text']:
+                texttrans(user, message.text);
+                break;
+        }
+
+    });
+    global.fn.gtranslate.get('این چنین سباهی مقدور نیست', 'fa', 'en');
+}
+module.exports = {translate}
