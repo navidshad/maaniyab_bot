@@ -1,7 +1,7 @@
 module.exports = function(){
     var request = require('request');
     
-    url = 'https://holue.herokuapp.com/';
+    url = 'https://maaniyab.herokuapp.com/';
     
     var requestToURL = function(){
         request(url, function(error, response, body) {
