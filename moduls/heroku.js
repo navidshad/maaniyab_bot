@@ -5,7 +5,7 @@ module.exports = function(){
     
     var requestToURL = function(){
         request(url, function(error, response, body) {
-            //console.log(new Date());
+            console.log(new Date());
           });
         setTimeout(requestToURL, 60000);
     }

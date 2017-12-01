@@ -6,9 +6,13 @@ var texttrans = function(user, text){
     var from = (user.diclang === langoptions['en']) ? 'en' : 'fa';
     var to   = (from === 'en') ? 'fa' : 'en';
 
-    fn.gtranslate.get(text,from,to, (t, result) => {
-        var mess = t + '\n';
+    fn.gtranslate.get(text, null, from,to, (origintext, editedtext, result) => {
+        var mess = origintext + '\n';
         mess += '--------------------------' + '\n';
+        if(editedtext) {
+            mess += editedtext + '\n';
+            mess += '--------------------------' + '\n';
+        }
         mess += result + '\n';
         mess += '@' + global.robot.username;
         global.robot.bot.sendMessage(user.userId, mess);

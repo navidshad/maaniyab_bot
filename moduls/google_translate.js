@@ -1,19 +1,18 @@
 var googletrans = require('google-translate-api');
 
-var get = function(text, from, to, callback){
-    googletrans(text, {'from': from, 'to': to}).then(res => {
+var get = function(orginText, editedtext, from, to, callback){
+    var textToTranslate = (editedtext) ? editedtext : orginText;
+    googletrans(textToTranslate, {'from': from, 'to': to}).then(res => {
         var result = '';
         if(res.from.text.didYouMean) {
-            result = res.from.text.value;
-            if(callback) callback(text,  result);
             //correcting
-            get(res.from.text.value, from, to, (t, r) => {
-                if(callback) callback(t, r);
+            get(orginText, res.from.text.value, from, to, (t, e, r) => {
+                if(callback) callback(t, e, r);
             });
         }
         else {
             result = res.text;
-            if(callback) callback(text, result);
+            if(callback) callback(orginText, editedtext, result);
         }
         //console.log(res.text);
         //=> Ik spreek Nederlands! 
