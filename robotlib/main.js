@@ -10,10 +10,10 @@ module.exports.create = function(){
         confige : {'modules':global.confige.modules}
     });
 
-    // //start bot
-    // newBot.start();
-    // //get category list
-    // global.fn.category.get();
-    // //get main menu items
-    // global.fn.getMainMenuItems();
+    //start bot
+    newBot.start();
+    //get category list
+    global.fn.category.get();
+    //get main menu items
+    global.fn.getMainMenuItems();
 }

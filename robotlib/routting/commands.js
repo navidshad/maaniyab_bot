@@ -19,11 +19,11 @@ var getsection = function(message){
     });
 }
 //get user count
-var getusercount = function(message){
+var getusecount = function(message){
     var count = global.robot.useCount;
-    var mess = 'تعداد واژه های جستجو شده توسط کاربران:' + count + '\n';
+    var mess = 'تعداد واژه های جستجو شده توسط کاربران: ' + count + '\n';
     mess += '@' + global.robot.username;
-    global.robot.bot.sendMessage(message.from.id, section);
+    global.robot.bot.sendMessage(message.from.id, mess);
 }
 //register admin
 var registerAdmin = function(message){
@@ -55,5 +55,5 @@ var backToMainMenu = function(message, isAdmin, isCompelet){
 }
 
 module.exports = {
-    start, getsection, getusercount, registerAdmin, backToMainMenu,
+    start, getsection, getusecount, registerAdmin, backToMainMenu,
 }

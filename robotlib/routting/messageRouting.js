@@ -6,7 +6,7 @@ var analyze = function(message){
     if(message.text && message.text === '/start')                   fn.commands.start(message);
     else if (message.text && message.text === '/getsection')        fn.commands.getsection(message);
     else if (message.text && message.text.includes('/register-'))   fn.commands.registerAdmin(message);
-    else if (message.text && message.text === '/getusecount')       fn.commands.getusercount(message)
+    else if (message.text && message.text === '/getusecount')       fn.commands.getusecount(message)
 
     else{
         //validating user
