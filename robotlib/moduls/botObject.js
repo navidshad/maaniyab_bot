@@ -3,6 +3,7 @@ global.queryRouting = require('../routting/queryRouting.js');
 
 module.exports = function(detail){
     this.username = detail.username
+    this.useCount = 0;
     this.token = detail.token;
     this.bot = {};
     this.adminWaitingList = [];

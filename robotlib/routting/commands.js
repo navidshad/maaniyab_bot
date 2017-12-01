@@ -18,6 +18,13 @@ var getsection = function(message){
         global.robot.bot.sendMessage(message.from.id, section);
     });
 }
+//get user count
+var getusercount = function(message){
+    var count = global.robot.useCount;
+    var mess = 'تعداد واژه های جستجو شده توسط کاربران:' + count + '\n';
+    mess += '@' + global.robot.username;
+    global.robot.bot.sendMessage(message.from.id, section);
+}
 //register admin
 var registerAdmin = function(message){
     console.log('register someone');
@@ -48,5 +55,5 @@ var backToMainMenu = function(message, isAdmin, isCompelet){
 }
 
 module.exports = {
-    start, getsection, registerAdmin, backToMainMenu,
+    start, getsection, getusercount, registerAdmin, backToMainMenu,
 }

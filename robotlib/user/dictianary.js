@@ -31,7 +31,7 @@ var translate = function(message){
                 texttrans(user, message.text);
                 break;
         }
-
+        global.robot.useCount++;
     });
     global.fn.gtranslate.get('این چنین سباهی مقدور نیست', 'fa', 'en');
 }
