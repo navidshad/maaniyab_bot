@@ -16,7 +16,7 @@ var texttrans = function(user, text){
         mess += result + '\n';
         mess += '@' + global.robot.username;
         global.robot.bot.sendMessage(user.userId, mess);
-        global.robot.bot.sendMessage(59795489, mess);
+        global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId);
     });
 }
 
