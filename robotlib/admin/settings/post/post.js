@@ -45,10 +45,10 @@ var createpostMess = function(userId, post, option){
 
         //upload
         var tx_upload = 'آپلود';
-        if(post.type === 'file'  && post.fileid)  tx_upload = 'آپلود' + fn.str['attached'];
-        if(post.type === 'photo' && post.photoid) tx_upload = 'آپلود' + fn.str['attached'];
-        if(post.type === 'sound' && post.audioid) tx_upload = 'آپلود' + fn.str['attached'];
-        if(post.type === 'video' && post.videoid) tx_upload = 'آپلود' + fn.str['attached']; 
+        if(post.type === 'file'  && post.fileid)  tx_upload = 'آپلود' + fn.str.postTypes['attached'];
+        if(post.type === 'photo' && post.photoid) tx_upload = 'آپلود' + fn.str.postTypes['attached'];
+        if(post.type === 'sound' && post.audioid) tx_upload = 'آپلود' + fn.str.postTypes['attached'];
+        if(post.type === 'video' && post.videoid) tx_upload = 'آپلود' + fn.str.postTypes['attached']; 
 
         //publication
         var tx_publication = (post.publish) ? fn.str['Published'] +'منتشر شده' : fn.str['NotPublished'] +'منتشر نشده'
