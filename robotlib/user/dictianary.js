@@ -6,14 +6,18 @@ var texttrans = function(user, text){
     var from = (user.diclang === langoptions['en']) ? 'en' : 'fa';
     var to   = (from === 'en') ? 'fa' : 'en';
 
-    fn.gtranslate.get(text, null, from,to, (origintext, editedtext, result) => {
+    fn.gtranslate.get(text, null, from,to, (origintext, editedtext, fresult, sresult) => {
         var mess = origintext + '\n';
         mess += '--------------------------' + '\n';
         if(editedtext) {
             mess += editedtext + '\n';
             mess += '--------------------------' + '\n';
         }
-        mess += result + '\n';
+        mess += fresult + '\n';
+        if(sresult) {
+            mess += '--------------------------' + '\n';
+            mess += sresult + '\n';
+        }
         mess += '@' + global.robot.username;
         global.robot.bot.sendMessage(user.userId, mess);
         global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId);
