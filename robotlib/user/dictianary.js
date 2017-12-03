@@ -8,16 +8,19 @@ var texttrans = function(user, text){
 
     fn.gtranslate.get(text, null, from,to, (origintext, editedtext, fresult, sresult) => {
         var mess = '🔹' + origintext + '\n';
+        
         mess += '--------------------------' + '\n';
         if(editedtext) {
             mess += '🔸' + editedtext + '\n';
             mess += '--------------------------' + '\n';
         }
+
         mess += '🔹' + fresult + '\n';
         if(sresult) {
             mess += '--------------------------' + '\n';
             mess += '🔸' + sresult + '\n';
         }
+
         mess += '@' + global.robot.username;
         fn.commands.backToMainMenu({'from':{'id':user.userId}}, user.isAdmin, user.isCompelet, mess);
         global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId);
