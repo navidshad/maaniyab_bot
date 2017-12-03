@@ -7,16 +7,16 @@ var texttrans = function(user, text){
     var to   = (from === 'en') ? 'fa' : 'en';
 
     fn.gtranslate.get(text, null, from,to, (origintext, editedtext, fresult, sresult) => {
-        var mess = origintext + '\n';
+        var mess = '🔹' + origintext + '\n';
         mess += '--------------------------' + '\n';
         if(editedtext) {
-            mess += editedtext + '\n';
+            mess += '🔸' + editedtext + '\n';
             mess += '--------------------------' + '\n';
         }
-        mess += fresult + '\n';
+        mess += '🔹' + fresult + '\n';
         if(sresult) {
             mess += '--------------------------' + '\n';
-            mess += sresult + '\n';
+            mess += '🔸' + sresult + '\n';
         }
         mess += '@' + global.robot.username;
         global.robot.bot.sendMessage(user.userId, mess);
