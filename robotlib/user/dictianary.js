@@ -19,7 +19,7 @@ var texttrans = function(user, text){
             mess += '🔸' + sresult + '\n';
         }
         mess += '@' + global.robot.username;
-        global.robot.bot.sendMessage(user.userId, mess);
+        fn.commands.backToMainMenu({'from':{'id':user.userId}}, user.isAdmin, user.isCompelet, mess);
         global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId);
     });
 }

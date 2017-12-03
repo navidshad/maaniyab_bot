@@ -33,7 +33,7 @@ var registerAdmin = function(message){
     global.robot.bot.sendMessage(message.from.id, 'ثبت نام انجام شد، کابر مورد نظر باید از ابتدا ربات را استارت کند.');
 }
 //back to mainMenu
-var backToMainMenu = function(message, isAdmin, isCompelet){
+var backToMainMenu = function(message, isAdmin, isCompelet, mess){
     console.log('go to main menu');
     var items = [];
     global.robot.menuItems.forEach(element => { items.push(element); });;
@@ -49,7 +49,8 @@ var backToMainMenu = function(message, isAdmin, isCompelet){
             //send main menu
             fn.userOper.setSection(message.from.id, fn.str['mainMenu'], false);
             remarkup = fn.generateKeyboard({section:fn.str['mainMenu'], 'list':items, "isCompelet": isCompelet, "isAdmin": isAdmin}, false);
-            global.robot.bot.sendMessage(message.from.id, fn.str['mainMenuMess'], remarkup);
+            var texttosend = (mess) ? mess : fn.str['mainMenuMess'];
+            global.robot.bot.sendMessage(message.from.id, texttosend, remarkup);
         }
     });
 }
