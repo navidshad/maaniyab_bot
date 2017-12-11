@@ -23,17 +23,16 @@ var getusecount = function(message){
     today = fn.time.gettime();
     fn.db.usecounter.count({}).exec((e, count) => {
         var mess = '✳️ ' + 'تعداد کل واژه های جستجو شده: ' + count + '\n';
+        mess += '@' + global.robot.username;
+        global.robot.bot.sendMessage(message.from.id, mess);
+
         if(today) {
             fn.db.usecounter.count({'date': fn.time.gettime()}).exec((e, todaycount) => {
                 if(!todaycount) return;
-                mess += '❇️ ' + 'تعداد واژه های جستجو شده توسط کاربران امروز: ' + todaycount + '\n';
-                mess += '@' + global.robot.username;
-                global.robot.bot.sendMessage(message.from.id, mess);
+                var todaymess = '❇️ ' + 'تعداد واژه های جستجو شده توسط کاربران امروز: ' + todaycount + '\n';
+                todaymess += '@' + global.robot.username;
+                global.robot.bot.sendMessage(message.from.id, todaymess);
             });
-        }
-        else{
-            mess += '@' + global.robot.username;
-            global.robot.bot.sendMessage(message.from.id, mess);
         }
     });
 
