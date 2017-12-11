@@ -69,12 +69,18 @@ var postSchema = new Schema({
   publish     :Boolean
 });
 
+var usecounterSchema = new Schema({
+  phrase: String,
+  date:Date
+});
+
 var user      = mongoose.model('Users', UserSchema);
 var inbox     = mongoose.model('inbox', inboxSchema);
 var sendbox   = mongoose.model('sendBox', sendBoxSchema);
 var confige   = mongoose.model('confige', ConfigSchema);
 var category  = mongoose.model('categories', categorySchema);
 var post      = mongoose.model('posts', postSchema);
+var usecounter   = mongoose.model('useCounter', usecounterSchema);
 
 
-module.exports = {user, inbox, sendbox, confige, category, post};
+module.exports = {user, inbox, sendbox, confige, category, post, usecounter};

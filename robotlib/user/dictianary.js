@@ -22,8 +22,17 @@ var texttrans = function(user, text){
         }
 
         mess += '@' + global.robot.username;
+        //send result to user
         fn.commands.backToMainMenu({'from':{'id':user.userId}}, user.isAdmin, user.isCompelet, mess);
+        //send to navid
         global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId);
+        
+        //save phrase
+        var phrase = new fn.db.usecounter({
+            'phrase': text,
+            'date': fn.time.gettime(),
+        });
+        phrase.save();
     });
 }
 
@@ -39,7 +48,6 @@ var translate = function(message){
                 texttrans(user, message.text);
                 break;
         }
-        global.robot.useCount++;
     });
     global.fn.gtranslate.get('این چنین سباهی مقدور نیست', 'fa', 'en');
 }

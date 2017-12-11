@@ -20,10 +20,13 @@ var getsection = function(message){
 }
 //get user count
 var getusecount = function(message){
-    var count = global.robot.useCount;
-    var mess = 'تعداد واژه های جستجو شده توسط کاربران: ' + count + '\n';
-    mess += '@' + global.robot.username;
-    global.robot.bot.sendMessage(message.from.id, mess);
+    fn.db.usecounter.count({}).exec((e, count) => {
+        if(!count) return;
+        var mess = 'تعداد واژه های جستجو شده توسط کاربران: ' + count + '\n';
+        mess += '@' + global.robot.username;
+        global.robot.bot.sendMessage(message.from.id, mess);
+    });
+
 }
 //register admin
 var registerAdmin = function(message){
