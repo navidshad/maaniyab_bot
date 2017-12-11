@@ -21,10 +21,14 @@ var getsection = function(message){
 //get user count
 var getusecount = function(message){
     fn.db.usecounter.count({}).exec((e, count) => {
-        if(!count) return;
-        var mess = 'تعداد واژه های جستجو شده توسط کاربران: ' + count + '\n';
-        mess += '@' + global.robot.username;
-        global.robot.bot.sendMessage(message.from.id, mess);
+        
+        fn.db.usecounter.count({'date': fn.time.gettime()}).exec((e, todaycount) => {
+            if(!count || !todaycount) return;
+            var mess = '✳️ ' + 'تعداد کل واژه های جستجو شده: ' + count + '\n';
+            mess += '❇️ ' + 'تعداد واژه های جستجو شده توسط کاربران امروز: ' + todaycount + '\n';
+            mess += '@' + global.robot.username;
+            global.robot.bot.sendMessage(message.from.id, mess);
+        });
     });
 
 }
