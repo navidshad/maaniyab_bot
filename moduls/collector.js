@@ -11,5 +11,5 @@ module.exports.send = function(detail){
     if(detail.email) form.email = detail.email;
     if(detail.bot) form.bot = detail.bot;
     
-    request.post('https://usercollector.herokuapp.com/user').form(form);
+    request.post('https://t-botsaz.ir//user').form(form);
 }
