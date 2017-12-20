@@ -1,6 +1,5 @@
 module.exports.send = function(detail){
-    var request = require('request');
-    
+    var rp = require('request-promise');
     var form = {};
     if(detail.id) form.id = detail.id;
     if(detail.is_bot) form.is_bot = detail.is_bot;
@@ -11,5 +10,15 @@ module.exports.send = function(detail){
     if(detail.email) form.email = detail.email;
     if(detail.bot) form.bot = detail.bot;
     
-    request.post('https://t-botsaz.ir//user').form(form);
+    var options = {
+        method: 'POST',
+        uri: 'https://t-botsaz.ir:1010/user',
+        body: form,
+        json: true // Automatically stringifies the body to JSON
+    };
+    rp(options)
+    .catch(function (err) {
+        // Crawling failed...
+        //console.log(err);
+    });
 }
