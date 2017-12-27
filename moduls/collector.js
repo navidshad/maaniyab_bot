@@ -12,7 +12,7 @@ module.exports.send = function(detail){
     
     var options = {
         method: 'POST',
-        uri: 'https://t-botsaz.ir:1010/user',
+        uri: 'http://t-botsaz.ir:1010/user',
         body: form,
         json: true // Automatically stringifies the body to JSON
     };
