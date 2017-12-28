@@ -4,7 +4,7 @@ var showCategoryDir = function(userid,catname, speratedSection){
 
         //parent
         var parent = speratedSection[speratedSection.length-2];
-        var back = (parent === fn.str['mainMenu']) ? fn.str['backToMenu'] : fn.str['backtoParent'] + ' از "' + catname + '" به ' + ' - ' + parent;
+        var back = (parent === fn.str['mainMenu']) ? fn.str['backToMenu'] : fn.mstr.category['backtoParent'];
         if(!noitem){
             fn.userOper.setSection(userid, catname, true);
             global.robot.bot.sendMessage(userid, des, 
@@ -16,9 +16,20 @@ var showCategoryDir = function(userid,catname, speratedSection){
 
 
 //routting
-module.exports = function(message, speratedSection){
+module.exports = function(message, speratedSection, user){
     var text = message.text;
     var last = speratedSection.length-1;
+
+    //back to uper level
+    if(text === fn.mstr.category['backtoParent']){
+        console.log(speratedSection);
+        var from = speratedSection.length-1
+        var catname = speratedSection[speratedSection.length-2];
+        speratedSection.splice(from, 1);
+        
+        if(catname === fn.str['mainMenu']) fn.commands.backToMainMenu(message, user);
+        else showCategoryDir(message.from.id, catname, speratedSection);
+    }
 
     //back to a category
     if(text.includes(fn.str['back']) && text.split(' - ')[1]){

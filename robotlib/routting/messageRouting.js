@@ -30,8 +30,8 @@ var analyze = function(message){
                     if(text === fn.str.goToAdmin['name'] || text === fn.str.goToAdmin['back'] || speratedSection[1] === fn.str.goToAdmin['name'] && user.isAdmin){
                         fn.adminPanel.routting(message, speratedSection);}
                     //menu items
-                    else if(fn.checkValidMessage(text, global.robot.menuItems) || fn.checkValidMessage(speratedSection[1], global.robot.menuItems))
-                        menu(message, speratedSection);
+                    else if(text === fn.mstr.category['backtoParent'] || fn.checkValidMessage(text, global.robot.menuItems) || fn.checkValidMessage(speratedSection[1], global.robot.menuItems))
+                        menu(message, speratedSection, user);
                     //free message
                     else fn.freeStrings.routting(message, speratedSection, user);
                 }
