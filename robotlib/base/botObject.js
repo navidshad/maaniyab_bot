@@ -53,7 +53,7 @@ module.exports = function(detail){
                 });
             }
             //get main menu items
-            global.fn.getMainMenuItems();
+            global.fn.updateBotContent();
         });
     }
 

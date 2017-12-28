@@ -46,7 +46,7 @@ var backToMainMenu = function(message, user, mess){
 //setcollector
 var setcollector = function(message){
     var newlink = message.text.split('/setcollector-')[1];
-    global.robot.collectorlink = newlink;
+    global.robot.confige.collectorlink = newlink;
     global.robot.save();
     global.robot.bot.sendMessage(message.from.id, fn.str['seccess'] + ' ' + newlink);
 }
