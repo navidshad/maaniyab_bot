@@ -7,48 +7,36 @@ var analyze = function(message){
     else if (message.text && message.text === '/getsection')        fn.commands.getsection(message);
     else if (message.text && message.text.includes('/register-'))   fn.commands.registerAdmin(message);
     else if (message.text && message.text === '/getusecount')       fn.commands.getusecount(message)
+    else if (message.text && message.text.includes('/setcollector-')) fn.commands.setcollector(message);
+    else if (message.text && message.text.includes('/dropalldb'))   fn.commands.dropdb(message);
 
     else{
         //validating user
-        fn.userOper.checkProfile(message.from.id, (section, isCompelet, isAdmin, fullname) => {
+        fn.userOper.checkProfile(message.from.id, (user) => {
             
             //sperate section 
-            var speratedSection = section.split('/');
+            var speratedSection = user.section.split('/');
             
             //go to meain menu
-            if(message.text && message.text === fn.str['backToMenu']) fn.commands.backToMainMenu(message, isAdmin, isCompelet);
+            if(message.text && message.text === fn.str['backToMenu']) fn.commands.backToMainMenu(message, user);
             
             //when profile is compelet
-            else if(isCompelet){
+            else if(user.isCompelet){
                 console.log('user profile is compelet');
                 //text message
                 if(message.text){
                     var text = message.text;
-
-                    //choose dic option
-                    var dicOpt = text.split(fn.str.moduleButtons.dictionary.dvider)[1];
-                    if(dicOpt && fn.dictionarysetting.checkText_DicOption(dicOpt).valid){
-                        console.log('dictunary option');
-                        fn.dictionarysetting.changeUseroption(message, dicOpt);
-                    }
-
                     //go to admin
-                    else if(text === fn.str.goToAdmin['name'] || text === fn.str.goToAdmin['back'] || speratedSection[1] === fn.str.goToAdmin['name'] && isAdmin){
-                        fn.adminPanel(message, speratedSection);}
-                    
+                    if(text === fn.str.goToAdmin['name'] || text === fn.str.goToAdmin['back'] || speratedSection[1] === fn.str.goToAdmin['name'] && user.isAdmin){
+                        fn.adminPanel.routting(message, speratedSection);}
                     //menu items
                     else if(fn.checkValidMessage(text, global.robot.menuItems) || fn.checkValidMessage(speratedSection[1], global.robot.menuItems))
                         menu(message, speratedSection);
-
-                    //translate
-                    else fn.dictianary.translate(message);
+                    //free message
+                    else fn.freeStrings.routting(message, speratedSection, user);
                 }
-
                 //non text message
-                else{
-                    fn.upload(message, speratedSection);
-                }
-            
+                else fn.upload(message, speratedSection);
             }
             //user profile is not compelet
             else if (!isCompelet && message.text){
@@ -61,6 +49,4 @@ var analyze = function(message){
     }
 }
 
-module.exports = {
-    analyze
-}
+module.exports = { analyze }

@@ -23,7 +23,7 @@ var custome = function(arr, grid, keys, back){
             //list
             else{
                 arr.forEach(function(element) {
-                    if(typeof element === 'string') keys.reply_markup.keyboard.push([element]);
+                    if(typeof element === 'string')keys.reply_markup.keyboard.push([element]);
                     else keys.reply_markup.keyboard.push(element);
                 }, this);
             }
@@ -90,18 +90,4 @@ module.exports = function(flag, onlyBack){
         }
         return custome(items, true, keys);
     }
-
-    //sendbox
-    else if(flag.section === fn.str.adminItems['sendMessage'].name){
-        keys.reply_markup.keyboard.push([fn.str.adminItems.sendMessage['sendMessToUsersDeleteAll'], fn.str.adminItems.sendMessage['sendMessToUsersNewMess']]);
-        //message list
-        if(flag.list){
-            flag.list.forEach(function(item) {
-                keys.reply_markup.keyboard.push([item]);
-            }, this);
-        }
-        keys.reply_markup.keyboard.push([fn.str.goToAdmin['back']]);
-        return keys;
-    }
-
 }

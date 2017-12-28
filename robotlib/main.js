@@ -1,7 +1,7 @@
 module.exports.create = function(){
     global.fn = require('./functions.js');
     global.fn.strArr = global.fn.convertObjectToArray(fn.str, {'nested': true});
-    var botObject = require('./moduls/botObject.js');
+    var botObject = require('./base/botObject.js');
     
     //make the bot to be an object
     var newBot = new botObject({
@@ -12,8 +12,6 @@ module.exports.create = function(){
 
     //start bot
     newBot.start();
-    //get category list
-    global.fn.category.get();
-    //get main menu items
-    global.fn.getMainMenuItems();
+    //get category list and main menu item
+    global.fn.updateBotContent();
 }

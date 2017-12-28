@@ -1,7 +1,8 @@
 fn = global.fn;
 
 var registerId = function(id, flag, regCallback){
-    fn.db.user.findOne({"userId": id}, 'section isAdmin', function(err, user1){
+    var tempuser = {};
+    fn.userOper.checkProfile(id, (user) => {
         isAdmin = false;
         var newAdminList = []
         global.robot.adminWaitingList.forEach(function(admin) {
@@ -11,95 +12,91 @@ var registerId = function(id, flag, regCallback){
         }, this);
         global.robot.adminWaitingList = newAdminList;
 
-        if(!user1){
+        if(!user){
             var newuser = new fn.db.user({
-                'userId'  : id,
-                'username': flag.username,
-                'fullname': flag.fullname,
-                'section' : fn.str['mainMenu'],
-                'isAdmin' : isAdmin,
-                'isCompelet':true,
-                'diclang': fn.str.moduleButtons.dictionary['to_en'],
-                'dictype': fn.str.moduleButtons.dictionary['trans_text']
+                userId  : id,
+                'username'  : flag.username,
+                'fullname'  : flag.fullname,
+                'section'   : fn.str['mainMenu'],
+                'isAdmin'   : isAdmin,
+                'isCompelet': true,
+                'diclang'   : fn.mstr.dictionary['to_en'],
+                'dictype'   : fn.mstr.dictionary['trans_text']
             });
             //set invitor id
             if(flag.invitor) newuser.invitorId = flag.invitor;
             newuser.save(() => {
-                if(regCallback) regCallback(isAdmin);
+                console.log('user has been registered');
             });
+            tempuser = newuser;
         }
         else{
-            user1.section = fn.str['mainMenu'];
-            user1.isCompelet = true;
-            user1.fullname = flag.fullname;
-            user1.username = flag.username;
+            user.section = fn.str['mainMenu'];
+            user.isCompelet = true;
+            user.fullname = flag.fullname;
+            user.username = flag.username;
 
-            if(user1.isAdmin === true){
-                isAdmin = user1.isAdmin;
+            if(user.isAdmin === true){
+                isAdmin = user.isAdmin;
             }
             else{
-                user1.isAdmin = isAdmin;
+                user.isAdmin = isAdmin;
             }
-            console.log(user1);
-            user1.save(() => {
-                if(regCallback) regCallback(isAdmin);
-            });
+            user.save();
+            tempuser = user;
         }
+        regCallback(tempuser);
     });
 }
 
 var editUser = function(userId,profile,ssCallBack){
-    fn.db.user.findOne({"userId": userId}, function(err, user){
-        if(user){
-            if(profile.isCompelet) user.isCompelet = true;
-            if(profile.fullname) user.fullname = profile.fullname;
-            if(profile.phone) user.phone = profile.phone;
-            if(profile.diclang) user.diclang = profile.diclang;
-            if(profile.dictype) user.dictype = profile.dictype;
-            user.save((e) => {
-                if(e) console.log(e);
-                if(ssCallBack) ssCallBack(user);
-            });
-        }
+    fn.userOper.checkProfile(userId, (user) => {
+        if(profile.isCompelet) user.isCompelet = true;
+        if(profile.fullname) user.fullname = profile.fullname;
+        if(profile.phone) user.phone = profile.phone;
+        if(profile.diclang) user.diclang = profile.diclang;
+        if(profile.dictype) user.dictype = profile.dictype;
+        user.save((e) => { 
+            if(e) console.log(e);
+            if(ssCallBack) ssCallBack(user); 
+        });
     });
 }
 
 var checkProfile = function(id, callback){
-    fn.db.user.findOne({'userId': id}, 'section isCompelet isAdmin fullname', function(err, user){
-        if(user){
-            callback(user.section, user.isCompelet, user.isAdmin, user.fullname);
-        }
+    fn.db.user.findOne({'userId':id}).exec((e, user) => {
+        if(user && callback) callback(user);
+        else if(callback) callback(null);
     });
 }
 
 var setSection = function(userId, section, additiveKey, ssCallBack){
-    fn.db.user.findOne({"userId": userId}, 'section', function(err, user){
-        if(user){
-            if(additiveKey){
-                if(user.section.includes(section)){
-                    //console.log('section added already');
-                    var sperateSection = user.section.split('/');
-                    var newSections = '';
-                    for(var i=0; i<sperateSection.length; i++){
-                        if(i>0)
-                            newSections += '/';
-                        newSections += sperateSection[i];
-                        if(sperateSection[i] === section)
-                            break;
-                    }
-                    user.section = newSections;
+    fn.userOper.checkProfile(userId, (user) => {
+        if (!user) return;
+        else if(additiveKey){
+            if(user.section.includes(section)){
+                //console.log('section added already');
+                var sperateSection = user.section.split('/');
+                var newSections = '';
+                for(var i=0; i<sperateSection.length; i++){
+                    if(i>0)
+                        newSections += '/';
+                    newSections += sperateSection[i];
+                    if(sperateSection[i] === section)
+                        break;
                 }
-                else{
-                    //console.log('section wasnt added already', section);
-                    user.section += '/' + section;
-                }
+                user.section = newSections;
             }
-            else{user.section = section;}
-            user.save(() => {
-                if(ssCallBack) 
-                    ssCallBack();
-            });
+            else{
+                //console.log('section wasnt added already', section);
+                user.section += '/' + section;
+            }
         }
+        else{user.section = section;}
+        user.save(() => {
+            if(ssCallBack) 
+                ssCallBack();
+        });
     });
 }
 

@@ -1,11 +1,12 @@
 var show = function(userid, newcat){
+    var mName = fn.mstr.inbox['modulename'];
     var activationtext = '',
     moduleOption = {},
     index = null;
     //find module option
     if(global.robot.confige.moduleOptions){
         global.robot.confige.moduleOptions.forEach(function(element, i) {
-            if(element.name === 'ticket') {
+            if(element.name === mName) {
                 index = i;
                 moduleOption = element;
             }
@@ -15,7 +16,7 @@ var show = function(userid, newcat){
 
     if(index === null) {
         activationtext = 'enable';
-        moduleOption = {'name':'ticket','active':false, 'button': fn.str.moduleButtons.contact['name']};
+        moduleOption = {'name':mName,'active':false, 'button': fn.mstr.inbox['lable']};
         global.robot.confige.moduleOptions.push(moduleOption);
     }
     
@@ -29,37 +30,40 @@ var show = function(userid, newcat){
     //save configuration
     global.robot.save();
 
-    var list = [fn.str.moduleButtons['category'].name, fn.str.moduleButtons.activation[activationtext]],
-    back = fn.str.adminItems.settings['back'],
+    var list = [fn.mstr['category'].asoption, fn.str.activation[activationtext]],
+    back = fn.mstr.inbox['back'],
     remarkup = fn.generateKeyboard({'custom': true, 'grid':true, 'list': list, 'back':back}, false);
-    global.robot.bot.sendMessage(userid, fn.str.settingsItems.inbox['name'], remarkup);
-    fn.userOper.setSection(userid, fn.str.settingsItems.inbox['name'], true);    
+    global.robot.bot.sendMessage(userid, fn.mstr.inbox['name'], remarkup);
+    fn.userOper.setSection(userid, fn.mstr.inbox['settings'], true);    
 }
 
 var category = function (message, speratedQuery){
     console.log('set categori for inbox');
-    fn.userOper.setSection(message.from.id, fn.str.moduleButtons['category'].name, true);
-    var back = fn.str.settingsItems['inbox']['back'];
+    fn.userOper.setSection(message.from.id, fn.mstr['category'].asoption, true);
+    var back = fn.mstr['inbox']['back'];
     var list = [];
-    global.robot.categories.forEach(function(element) { list.push(element.parent + ' - ' + element.name); }, this);
-    global.robot.bot.sendMessage(message.from.id, fn.str.editPost['category'], 
+    global.robot.category.forEach((element) => {
+        list.push(element.parent + ' - ' + element.name);
+    });
+    global.robot.bot.sendMessage(message.from.id, fn.mstr.post.edit['category'], 
     fn.generateKeyboard({'custom': true, 'grid':false, 'list': list, 'back':back}, false));
 }
 
 var routting = function(message, speratedSection){
+    var mName = fn.mstr.inbox['modulename'];
     var text = message.text;
     var last = speratedSection.length-1;
     //show inbox setting
-    if (text == fn.str.settingsItems.inbox['name'] || text == fn.str.settingsItems.inbox['back']){
+    if (text === fn.mstr.inbox['settings'] || text === fn.mstr.inbox['back']){
         show(message.from.id);
     }
 
     //active or deactive
-    else if(fn.checkValidMessage(text, [fn.str.moduleButtons.activation.enable,fn.str.moduleButtons.activation.disable])){
+    else if(fn.checkValidMessage(text, [fn.str.activation.enable,fn.str.activation.disable])){
         console.log('active deactive inbox');
-        var key = (text === fn.str.moduleButtons.activation.enable) ? true : false;
+        var key = (text === fn.str.activation.enable) ? true : false;
         global.robot.confige.moduleOptions.forEach(function(element) {
-            if(element.name === 'ticket') 
+            if(element.name === mName) 
                 element.active = key;
         }, this);
 
@@ -68,11 +72,11 @@ var routting = function(message, speratedSection){
     }
 
     //set category
-    else if(text === fn.str.moduleButtons['category'].name) category(message, speratedSection);
-    else if(speratedSection[last] == fn.str.moduleButtons['category'].name){
+    else if(text === fn.mstr['category'].asoption) category(message, speratedSection);
+    else if(speratedSection[last] == fn.mstr['category'].asoption){
         console.log('get new category for inbox');
         var cat = text.split(' - ')[1];
-        if(fn.category.checkInValidCat(cat)){
+        if(fn.m.category.checkInValidCat(cat)){
             show (message.from.id, cat);
         }else global.robot.bot.sendMessage(message.from.id, fn.str['choosethisItems']);
     }

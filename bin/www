@@ -12,10 +12,6 @@ var http = require('http');
 var botApplication = require('../robotlib/main');
 botApplication.create();
 
-//
-// var heroku = require('../moduls/heroku');
-// heroku();
-
 /**
  * Get port from environment and store in Express.
  */

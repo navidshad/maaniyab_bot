@@ -3,12 +3,11 @@ global.queryRouting = require('../routting/queryRouting.js');
 
 module.exports = function(detail){
     this.username = detail.username
-    this.useCount = 0;
     this.token = detail.token;
     this.bot = {};
     this.adminWaitingList = [];
     this.confige = detail.confige;
-    this.categories = [];
+    this.category = [];
     this.menuItems = [];
 
     this.start = function(){ 
@@ -33,6 +32,8 @@ module.exports = function(detail){
         global.fn.db.confige.findOne({"username": this.username}, function(err, conf){
             if(conf){
                 conf.username = global.robot.username,
+                conf.collectorlink = global.robot.confige.collectorlink,
+                conf.firstmessage = global.robot.confige.firstmessage,
                 conf.modules = global.robot.confige.modules,
                 conf.moduleOptions = global.robot.confige.moduleOptions
                 conf.save(() => {
@@ -42,6 +43,8 @@ module.exports = function(detail){
             else{
                 var conf = new global.fn.db.confige({
                     "username": global.robot.username,
+                    "collectorlink": global.robot.confige.collectorlink,
+                    "firstmessage" : global.robot.confige.firstmessage,
                     "modules": global.robot.confige.modules,
                     "moduleOptions": global.robot.confige.moduleOptions
                 });
@@ -58,11 +61,13 @@ module.exports = function(detail){
         global.fn.db.confige.findOne({"username": this.username}, function(err, conf){
             if(conf){
                 global.robot.confige.moduleOptions = conf.moduleOptions;
+                global.robot.confige.collectorlink = conf.collectorlink;
+                global.robot.confige.firstmessage = conf.firstmessage;
                 if(loadCalBack) loadCalBack();
             }
             else if(loadCalBack) loadCalBack();
             //get main menu items
-            global.fn.getMainMenuItems();
+            global.fn.updateBotContent();
         });
     }
 }

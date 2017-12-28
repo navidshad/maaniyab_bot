@@ -19,7 +19,7 @@ var sendmessage = function(userid, sendboxid){
                 }
                 else{
                     global.robot.bot.sendMessage(userid, 'هیچ کاربری برای ارسال پیام پیدا نشد');
-                    //global.fn.sendbox.editMessage(sendboxid, {}, userid);
+                    //global.fn.m.sendbox.editMessage(sendboxid, {}, userid);
                 }
             });
         }
@@ -33,21 +33,21 @@ module.exports = function(query, speratedQuery){
     global.robot.bot.deleteMessage(query.message.chat.id, query.message.message_id);
 
     //edit message
-    if(speratedQuery[1] === global.fn.str['queryAdminSndMessEditMessage']){
+    if(speratedQuery[1] === global.fn.mstr.sendMessage['queryAdminSndMessEditMessage']){
         console.log('get message text');
-        fn.userOper.setSection(query.from.id, fn.str['mainMenu'] + '/' + fn.str.goToAdmin['name'] + '/' + fn.str.adminItems['sendMessage'].name + '/' + fn.str.adminItems.sendMessage['sendMessToUsersEditMess'] + '/' + speratedQuery[speratedQuery.length-1], false);
-        global.robot.bot.sendMessage(query.from.id, fn.str.adminItems.sendMessage['sendMessToUsersEditMess'], fn.generateKeyboard({section:fn.str.adminItems['sendMessage'].back}, true));
+        fn.userOper.setSection(query.from.id, fn.str['mainMenu'] + '/' + fn.str.goToAdmin['name'] + '/' + fn.mstr['sendMessage'].name + '/' + fn.mstr.sendMessage['sendMessToUsersEditMess'] + '/' + speratedQuery[speratedQuery.length-1], false);
+        global.robot.bot.sendMessage(query.from.id, fn.mstr.sendMessage['sendMessToUsersEditMess'], fn.generateKeyboard({section:fn.mstr['sendMessage'].back}, true));
     }
 
     //delete message
-    else if(speratedQuery[1] === global.fn.str['queryAdminSndMessDel']){
+    else if(speratedQuery[1] === global.fn.mstr.sendMessage['queryAdminSndMessDel']){
         fn.db.sendbox.remove({'_id': speratedQuery[speratedQuery.length-1]}, function(err){
-            global.robot.bot.sendMessage(query.from.id, fn.str['seccess'])
+            fn.m.sendbox.showSendBoxsection(query.from.id, fn.str['seccess']);
         });
     }
 
     //send message
-    else if(speratedQuery[1] === global.fn.str['queryAdminSndMessSend']){
+    else if(speratedQuery[1] === global.fn.mstr.sendMessage['queryAdminSndMessSend']){
         sendmessage(query.from.id, speratedQuery[speratedQuery.length-1]);
     }
 }

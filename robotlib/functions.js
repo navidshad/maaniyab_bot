@@ -1,30 +1,23 @@
-var db                  = require('./moduls/db.js');
-var str                 = require('./moduls/staticStrings.js');
+var db                  = require('./base/db.js');
+var str                 = require('./str/staticStrings.js');
+var mstr                = require('./str/modulesStrings');
 var telegramBot         = require('node-telegram-bot-api');
-var generateKeyboard    = require('./moduls/generateKeyboard.js');
+var generateKeyboard    = require('./base/generateKeyboard.js');
 var time                = require('../moduls/time.js');
 var collector           = require('../moduls/collector');
 var fs                  = require('fs');
 var request             = require('request');
 var path                = require('path');
 var commands            = require('./routting/commands');
-var gtranslate          = require('../moduls/google_translate');
+var freeStrings         = require('./routting/freeStrings');
+var m                   = require('./moduls/moduls');
 
 //user
 var userOper        = require('./user/userOperations.js');
-var sendMessToAdmin = require('./user/sendMessageToAdmin.js');
-var dictianary      = require('./user/dictianary');
 
 //admin
 var adminPanel      = require('./admin/adminPanel.js');
-var sendbox         = require('./admin/sendbox/sendMessageToUsers.js');
-var inbox           = require('./admin/inbox.js');
 var upload          = require('./admin/upload.js');
-var settings        = require('./admin/settings/settings.js');
-var category        = require('./admin/settings/category/category.js');
-var post            = require('./admin/settings/post/post.js');
-var inboxsetting    = require('./admin/settings/inboxsetting.js');
-var dictionarysetting = require('./admin/settings/dictionarysetting');
 
 var convertObjectToArray = function(object, option){
 
@@ -59,13 +52,13 @@ var converAMenuItemsToArray = function(object){
     return items;
 }
 
-var checkValidMessage = function(text, custom, flag){
+var checkValidMessage = function(text, custom){
     var isvalid = false;
-    var index = null;
     //str
     if(custom) {
-        custom.forEach(function(element, i) {
-            if(text && element.toString().trim() === text.toString().trim()) { isvalid = true; index = i}
+        //console.log(custom);
+        custom.forEach(function(element) {
+            if(element && text && element.toString().trim() === text.toString().trim()) isvalid = true;
         }, this);
     }
     else {
@@ -74,9 +67,7 @@ var checkValidMessage = function(text, custom, flag){
             isvalid = true;
         }, this);
     }
-    //return
-    if(flag && flag.returnIndex) return { 'valid' : isvalid, 'index': index}
-    else return isvalid;
+    return isvalid;
 }
 
 var saveTelegramFile = function(id, fileName, savePath, callback){
@@ -103,7 +94,7 @@ var getMenuItems = function(name, callback){
             var modulsoptions = global.robot.confige.moduleOptions;
             if(modulsoptions) {
                 modulsoptions.forEach(function(md) {
-                    if (md.category && md.category === name) items.push({'name':md.button, 'order': 1})
+                    if(md.category && md.category === name) items.push({'name':md.button, 'order': 1})
                 }, this);
             }
 
@@ -127,9 +118,10 @@ var getMenuItems = function(name, callback){
     });
 }
 
-var getMainMenuItems = function(userid){
-    getMenuItems(fn.str['maincategory'], (items) => {
+var getMainMenuItems = function(){
+    getMenuItems(fn.mstr.category['maincategory'], (items) => { 
         global.robot.menuItems = (items) ? items : [];
+        //items.push(fn.str.mainMenuItems['contact']);
     });
 }
 
@@ -143,14 +135,29 @@ var queryStringMaker = function(parameter, list, condition){
     return query;
 }
 
+var getModuleOption = function(name){
+    var moduleOption = {};
+    if(global.robot.confige.moduleOptions){
+        global.robot.confige.moduleOptions.forEach(function(element, i) {
+            if(element.name === name) { moduleOption = element; }
+        }, this);
+    }
+    return moduleOption;
+}
+
+var updateBotContent = function(callback){
+    m.category.get(() => { getMainMenuItems(); })
+    if(callback) callback();
+}
+
 module.exports = {
     //system
-    db, str, time, telegramBot, generateKeyboard, convertObjectToArray, commands,
+    db, str, mstr, time, telegramBot, generateKeyboard, convertObjectToArray, commands,
     getMainMenuItems, getMenuItems, converAMenuItemsToArray, queryStringMaker,
-    checkValidMessage, saveTelegramFile, collector, gtranslate,
+    checkValidMessage, saveTelegramFile, collector, freeStrings, m,
+    updateBotContent, getModuleOption,
     //user
-    userOper, sendMessToAdmin, dictianary,
+    userOper, 
     //admin
-    adminPanel, sendbox, upload, inbox, settings, category, post, inboxsetting,
-    dictionarysetting,
+    adminPanel, upload, 
 }

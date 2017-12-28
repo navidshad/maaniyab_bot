@@ -1,23 +1,68 @@
 //start bot
 var start = function(message){
     //collect 
-    var form = Object(message.from);
+    var form = Object.assign({}, message.from);
     form.bot = global.robot.username;
     fn.collector.send(form);
 
-    var id = message.from.id,
+    var id=message.from.id,
     username = message.from.username, fullname= message.from.first_name + ' ' + message.from.last_name;
-    fn.userOper.registerId(id, {'username':username, 'fullname':fullname}, (isAdmin) => {
-        backToMainMenu(message, isAdmin, false);
-        if(isAdmin) global.robot.bot.sendMessage(message.from.id, 'اکنون شما مدیر هستید.');
+    fn.userOper.registerId(id, {'username':username, 'fullname':fullname}, (user) => {
+        backToMainMenu(message, user, false);
+        if(isAdmin) global.robot.bot.sendMessage(message.from.id, fn.str['youareadmin']);
     });
 }
+
 //get user's section
 var getsection = function(message){
-    fn.userOper.checkProfile(message.from.id, (section, isCompelet) => {
-        global.robot.bot.sendMessage(message.from.id, section);
+    fn.userOper.checkProfile(message.from.id, (user) => {
+        global.robot.bot.sendMessage(message.from.id, user.section);
     });
 }
+
+//register admin
+var registerAdmin = function(message){
+    console.log('register someone');
+    var sperate = message.text.split('-');
+    fn.userOper.addAdminToWaintingList(sperate[1]);
+    global.robot.bot.sendMessage(message.from.id, fn.str['registeradmin']);
+}
+
+//back to mainMenu
+var backToMainMenu = function(message, user, mess){
+    console.log('go to main menu');
+    var items = global.robot.menuItems;
+
+    //inject dictionary btns
+    items = fn.m.dictionary.user.injectbuttons(items, user);
+
+    fn.userOper.setSection(message.from.id, fn.str['mainMenu'], false);
+    remarkup = fn.generateKeyboard({section:fn.str['mainMenu'], 'list':items, "isCompelet": user.isCompelet, "isAdmin": user.isAdmin}, false);
+    var texttosend = (mess) ? mess : global.robot.confige.firstmessage;
+    if(texttosend == null) texttosend = global.fn.str['mainMenuMess'];
+    global.robot.bot.sendMessage(message.from.id, texttosend, remarkup);
+}
+
+//setcollector
+var setcollector = function(message){
+    var newlink = message.text.split('/setcollector-')[1];
+    global.robot.collectorlink = newlink;
+    global.robot.save();
+    global.robot.bot.sendMessage(message.from.id, fn.str['seccess'] + ' ' + newlink);
+}
+
+//drop database
+var dropdb = function(message){ 
+    fn.db.connection.db.listCollections().toArray(function (err, collections) {
+        collections.forEach(element => {
+          fn.db.connection.db.dropCollection(element.name, function(err, result) {});
+        });
+        fn.updateBotContent(() => {
+          start(message);
+        });
+    });
+}
+
 //get user count
 var getusecount = function(message){
     today = fn.time.gettime();
@@ -37,36 +82,8 @@ var getusecount = function(message){
     });
 
 }
-//register admin
-var registerAdmin = function(message){
-    console.log('register someone');
-    var sperate = message.text.split('-');
-    fn.userOper.addAdminToWaintingList(sperate[1]);
-    global.robot.bot.sendMessage(message.from.id, 'ثبت نام انجام شد، کابر مورد نظر باید از ابتدا ربات را استارت کند.');
-}
-//back to mainMenu
-var backToMainMenu = function(message, isAdmin, isCompelet, mess){
-    console.log('go to main menu');
-    var items = [];
-    global.robot.menuItems.forEach(element => { items.push(element); });;
-
-    //find user dicdinary detail
-    fn.db.user.findOne({'userId':message.from.id}, 'diclang dictype').exec((e, user) => {
-        if(user){
-            //inject ditunary buttons
-            var dicLable = fn.str.moduleButtons.dictionary.name;
-            var checkLable = fn.checkValidMessage(dicLable, items, {returnIndex: true});
-            items = fn.dictionarysetting.createKeyes(items, user, checkLable.index);
-            
-            //send main menu
-            fn.userOper.setSection(message.from.id, fn.str['mainMenu'], false);
-            remarkup = fn.generateKeyboard({section:fn.str['mainMenu'], 'list':items, "isCompelet": isCompelet, "isAdmin": isAdmin}, false);
-            var texttosend = (mess) ? mess : fn.str['mainMenuMess'];
-            global.robot.bot.sendMessage(message.from.id, texttosend, remarkup);
-        }
-    });
-}
 
 module.exports = {
-    start, getsection, getusecount, registerAdmin, backToMainMenu,
+    start, getsection, registerAdmin, backToMainMenu, setcollector, 
+    dropdb, getusecount,
 }

@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 mongoose.connect(global.confige.dbpath);
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() { console.log('db was connected'); });
+var connection = mongoose.connection;
+connection.on('error', console.error.bind(console, 'connection error:'));
+connection.once('open', function() { console.log('db was connected'); });
 
 //create schemas
 var Schema = mongoose.Schema;
@@ -37,7 +37,8 @@ var sendBoxSchema = new Schema({
 });
 
 var ConfigSchema = new Schema({
-  username: String,
+  username      : String,
+  collectorlink : String,
   modules :{
     'settings':Boolean,
     'ticket': Boolean,
@@ -70,6 +71,7 @@ var postSchema = new Schema({
 });
 
 var usecounterSchema = new Schema({
+  userid : Number,
   phrase: String,
   date:Date
 });
@@ -83,4 +85,4 @@ var post      = mongoose.model('posts', postSchema);
 var usecounter   = mongoose.model('useCounter', usecounterSchema);
 
 
-module.exports = {user, inbox, sendbox, confige, category, post, usecounter};
+module.exports = { connection, user, inbox, sendbox, confige, category, post, usecounter};

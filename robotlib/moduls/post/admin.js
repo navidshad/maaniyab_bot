@@ -1,8 +1,8 @@
-var showPostList = function(userid){
-    fn.userOper.setSection(userid, fn.str.settingsItems.post['name'], true);
-    var list = [fn.str.postOptions];
-    var back = fn.str.adminItems.settings['back'];
-    var mess = fn.str.settingsItems.post['name'];
+var showPostList = function(userid, injectedtext){
+    fn.userOper.setSection(userid, fn.mstr.post['name'], true);
+    var list = [fn.mstr.post.postOptions];
+    var back = fn.str.goToAdmin['back'];
+    var mess = (injectedtext) ? injectedtext : fn.mstr.post['name'];
     //find
     fn.db.post.find({}).select('name category').sort('-_id').exec((e, cats) => {
         if(cats && cats.length > 0) cats.forEach(function(element) { 
@@ -15,26 +15,26 @@ var showPostList = function(userid){
 var createpostMess = function(userId, post, option){
         //create callback keyboard
         var detailArr = [];
-        var fn_text     = fn.str['queryPost'] + '-' + fn.str['queryPostText'] + '-' + post._id;
-        var fn_file     = fn.str['queryPost'] + '-' + fn.str['queryPostFile'] + '-' + post._id;
-        var fn_photo    = fn.str['queryPost'] + '-' + fn.str['queryPostPhoto'] + '-' + post._id;
-        var fn_sound    = fn.str['queryPost'] + '-' + fn.str['queryPostSound'] + '-' + post._id;
-        var fn_video    = fn.str['queryPost'] + '-' + fn.str['queryPostVideo'] + '-' + post._id;
-        var fn_upload   = fn.str['queryPost'] + '-' + fn.str['queryUpload'] + '-' + post._id;
+        var fn_text     = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostText'] + '-' + post._id;
+        var fn_file     = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostFile'] + '-' + post._id;
+        var fn_photo    = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostPhoto'] + '-' + post._id;
+        var fn_sound    = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostSound'] + '-' + post._id;
+        var fn_video    = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostVideo'] + '-' + post._id;
+        var fn_upload   = fn.mstr.post['queryPost'] + '-' + fn.str['queryUpload'] + '-' + post._id;
         
-        var fn_name         = fn.str['queryPost'] + '-' + fn.str['queryPostName'] + '-' + post._id;
-        var fn_category     = fn.str['queryPost'] + '-' + fn.str['queryPostCategory'] + '-' + post._id;
-        var fn_description  = fn.str['queryPost'] + '-' + fn.str['queryPostDescription'] + '-' + post._id;
-        var fn_delete       = fn.str['queryPost'] + '-' + fn.str['queryDelete'] + '-' + post._id;
-        var fn_publication  = fn.str['queryPost'] + '-' + fn.str['queryPublication'] + '-' + post._id;
-        var fn_order        = fn.str['queryPost'] + '-' + fn.str['queryOrder'] + '-' + post._id;            
-        var fn_close        = fn.str['queryPost'] + '-close';
+        var fn_name         = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostName'] + '-' + post._id;
+        var fn_category     = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostCategory'] + '-' + post._id;
+        var fn_description  = fn.mstr.post['queryPost'] + '-' + fn.mstr.post['queryPostDescription'] + '-' + post._id;
+        var fn_delete       = fn.mstr.post['queryPost'] + '-' + fn.str['queryDelete'] + '-' + post._id;
+        var fn_publication  = fn.mstr.post['queryPost'] + '-' + fn.str['queryPublication'] + '-' + post._id;
+        var fn_order        = fn.mstr.post['queryPost'] + '-' + fn.str['queryOrder'] + '-' + post._id;            
+        var fn_close        = fn.mstr.post['queryPost'] + '-close';
 
-        var tx_text=fn.str.postTypes['text'].icon,
-        tx_file=fn.str.postTypes['file'].icon,
-        tx_photo=fn.str.postTypes['photo'].icon, 
-        tx_sound=fn.str.postTypes['sound'].icon, 
-        tx_video=fn.str.postTypes['video'].icon;
+        var tx_text =fn.mstr.post.types['text'].icon,
+        tx_file     =fn.mstr.post.types['file'].icon,
+        tx_photo    =fn.mstr.post.types['photo'].icon, 
+        tx_sound    =fn.mstr.post.types['sound'].icon, 
+        tx_video    =fn.mstr.post.types['video'].icon;
         
         console.log(post.type)
         if(post.type === 'text')       tx_text = tx_text + ' ' + fn.str['Published'];
@@ -45,10 +45,10 @@ var createpostMess = function(userId, post, option){
 
         //upload
         var tx_upload = 'آپلود';
-        if(post.type === 'file'  && post.fileid)  tx_upload = 'آپلود' + fn.str.postTypes['attached'];
-        if(post.type === 'photo' && post.photoid) tx_upload = 'آپلود' + fn.str.postTypes['attached'];
-        if(post.type === 'sound' && post.audioid) tx_upload = 'آپلود' + fn.str.postTypes['attached'];
-        if(post.type === 'video' && post.videoid) tx_upload = 'آپلود' + fn.str.postTypes['attached']; 
+        if(post.type === 'file'  && post.fileid)  tx_upload = 'آپلود' + fn.mstr.post.types['attached'];
+        if(post.type === 'photo' && post.photoid) tx_upload = 'آپلود' + fn.mstr.post.types['attached'];
+        if(post.type === 'sound' && post.audioid) tx_upload = 'آپلود' + fn.mstr.post.types['attached'];
+        if(post.type === 'video' && post.videoid) tx_upload = 'آپلود' + fn.mstr.post.types['attached']; 
 
         //publication
         var tx_publication = (post.publish) ? fn.str['Published'] +'منتشر شده' : fn.str['NotPublished'] +'منتشر نشده'
@@ -94,8 +94,8 @@ var createpostMess = function(userId, post, option){
        '⏺ ' + 'دسته بندی: ' + category + '\n' +
        '⏺ ' + 'اولویت: ' + order + '\n' +
        '⏺ ' + 'وضعیت: ' + publish + '\n' + 
-       '⏺ ' + 'توضیحات: ' + '\n' +
        'ــــــــــــــــــــــــــــــــ' + '\n' +
+       '⏺ ' + 'توضیحات: ' + '\n' +
        description + '\n' + 
        'ــــــــــــــــــــــــــــــــ' + '\n' + 
        '⚠️' + 'برای ویرایش مطلب از دکمه های پیوست شده استفاده کنید.';
@@ -108,22 +108,25 @@ var createpostMess = function(userId, post, option){
 var ceatePost = function(message){
     var newpost = new fn.db.post({
         'name': message.text,
-        'category': fn.str['maincategory'],
+        'category': fn.mstr.category['maincategory'],
         'order': 1,
         'type': 'text',
         'date': fn.time.gettime(),
         'publish': false
     });
-    newpost.save(() => { showPostList(message.from.id); fn.getMainMenuItems();});
+    newpost.save(() => { 
+        showPostList(message.from.id, fn.str['seccess']); 
+        fn.updateBotContent();
+    });
 }
 
 var editpost = function(id, detail, userId, ecCallBack){
     //console.log('edit a post', id);
     fn.db.post.findOne({"_id": id}, function(err, post){
-        fn.userOper.setSection(userId, fn.str.settingsItems.post['name'], true);
+        fn.userOper.setSection(userId, fn.mstr.post['name'], true);
         if(post){
-            if(detail.name) post.name = detail.name;
-            if(detail.category) post.category = detail.category;
+            if(detail.name) post.name           = detail.name;
+            if(detail.category) post.category   = detail.category;
             if(detail.description) post.description      = detail.description;
             if(detail.type) post.type            = detail.type;
             if(detail.fileid) post.fileid        = detail.fileid;
@@ -138,77 +141,75 @@ var editpost = function(id, detail, userId, ecCallBack){
             }
             if(detail.order) post.order = detail.order;
 
-
             post.save(() => {
-                global.robot.bot.sendMessage(userId, fn.str['seccess'], fn.generateKeyboard({section:fn.str['goTopost']}));
+                global.robot.bot.sendMessage(userId, fn.str['seccess']);
                 createpostMess(userId, post);
-                global.fn.category.get();
-                if(ecCallBack) 
-                    ecCallBack();
+                global.fn.updateBotContent();
+                if(ecCallBack) ecCallBack();
             });
         }
         else{
-            global.robot.bot.sendMessage(userId, 'این مطلب دیگر وجود ندارد', fn.generateKeyboard({section:fn.str['goTopost']}));
+            global.robot.bot.sendMessage(userId, 'این مطلب دیگر وجود ندارد');
         }
     });
 }
 
-var upload = require('./postUpload.js');
+var upload = require('./upload.js');
+var user   = require('./user');
 
 var routting = function(message, speratedSection){
     var text = message.text;
     var last = speratedSection.length-1;
     
     //show posts root
-    if(text === fn.str.settingsItems.post['name'] || text === fn.str.settingsItems.post['back']) showPostList(message.from.id);
+    if(text === fn.mstr.post['name'] || text === fn.mstr.post['back']) showPostList(message.from.id);
 
     //create new post
-    else if(text === fn.str.postOptions[1]){
-        var mess = fn.str['newSCMess'];
-        var back = fn.str.settingsItems.post['back'];
+    else if(text === fn.mstr.post.postOptions[1]){
+        var mess = fn.mstr.post.edit['newSCMess'];
+        var back = fn.mstr.post['back'];
         
-        fn.userOper.setSection(message.from.id, fn.str.postOptions[1], true);        
+        fn.userOper.setSection(message.from.id, fn.mstr.post.postOptions[1], true);        
         global.robot.bot.sendMessage(message.from.id, mess, fn.generateKeyboard({'section': back}, true));
     }
-    else if(speratedSection[last] === fn.str.postOptions[1]){
-        if(fn.category.checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.str.scErrors[0]);
+    else if(speratedSection[last] === fn.mstr.post.postOptions[1]){
+        if(fn.m.category.checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.mstr.post.scErrors[0]);
         else if(fn.checkValidMessage(text)) global.robot.bot.sendMessage(message.from.id, fn.str['chooseOtherText']);
         else{
             fn.db.post.findOne({'name': text}).exec((e, post) => {
                 if(!post) ceatePost(message);
-                else global.robot.bot.sendMessage(message.from.id, fn.str.scErrors[1]);
+                else global.robot.bot.sendMessage(message.from.id, fn.mstr.post.scErrors[1]);
             });
         }
     }
 
     //edit name
-    else if(speratedSection[last-1] === fn.str.editPost['name']){
-        if(fn.category.checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.str.scErrors[0]);
+    else if(speratedSection[last-1] === fn.mstr.post.edit['name']){
+        if(fn.m.category.checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.mstr.post.scErrors[0]);
         else if(fn.checkValidMessage(text)) global.robot.bot.sendMessage(message.from.id, fn.str['chooseOtherText']);
         else{
             fn.db.post.findOne({'name': text}).exec((e, post) => {
                 if(!post) editpost(speratedSection[last], {'name': text}, message.from.id);
-                else global.robot.bot.sendMessage(message.from.id, fn.str.scErrors[1]);
+                else global.robot.bot.sendMessage(message.from.id, fn.mstr.post.scErrors[1]);
             });
         }
     }
 
     //edit decription
-    else if (speratedSection[last-1] === fn.str.editPost['description']) 
+    else if (speratedSection[last-1] === fn.mstr.post.edit['description']) 
         editpost(speratedSection[last], {'description': text}, message.from.id);
 
     //edit category
-    else if (speratedSection[last-1] === fn.str.editPost['category']){
+    else if (speratedSection[last-1] === fn.mstr.post.edit['category']){
         var cat = text.split(' - ')[1];
-        if(fn.category.checkInValidCat(cat)){
-            editpost(speratedSection[last], {'category': cat}, message.from.id);
-        }else global.robot.bot.sendMessage(message.from.id, fn.str['choosethisItems']);
+        if(fn.m.category.checkInValidCat(cat)) editpost(speratedSection[last], {'category': cat}, message.from.id);
+        else global.robot.bot.sendMessage(message.from.id, fn.str['choosethisItems']);
     }
 
     //edit order
-    else if (speratedSection[last-1] === fn.str.editPost['order']) 
+    else if (speratedSection[last-1] === fn.mstr.post.edit['order']) 
         if(parseFloat(text) || text === 0) editpost(speratedSection[last], {'order': text}, message.from.id);
-        else global.robot.bot.sendMessage(message.from.id, fn.str.editPost['order']);                
+        else global.robot.bot.sendMessage(message.from.id, fn.mstr.post.edit['order']);                
 
     //choose a post
     else {
@@ -219,4 +220,4 @@ var routting = function(message, speratedSection){
         });
     }
 }
-module.exports = {routting, editpost, upload}
+module.exports = {routting, showPostList, editpost, upload, user}

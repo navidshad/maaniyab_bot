@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'MaaniYab telegram bot' });
+  res.render('index', { title: 'Telegram Bot Template' });
 });
 
 module.exports = router;

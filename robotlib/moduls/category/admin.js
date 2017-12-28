@@ -1,14 +1,15 @@
 //primarly
 var get  = function(callback){
     fn.db.category.find({}).exec((er, cats) => {
-        global.robot.categories = [{'name':fn.str.maincategory, 'parent':'.'}];
+        global.robot.category = [{'name':fn.mstr.category.maincategory, 'parent':'.'}];
         if(cats) cats.forEach(function(element) {
-           global.robot.categories.push({'name':element.name, 'parent': element.parent, 'order':element.order});
+           global.robot.category.push({'name':element.name, 'parent': element.parent, 'order':element.order});
        }, this); 
-       global.fn.getMainMenuItems();
+
        if(callback) callback();
     });
 }
+
 var checkInValidCat = function(text, custom){
     var isvalid = false;
     if(custom) {
@@ -19,9 +20,9 @@ var checkInValidCat = function(text, custom){
     }
     else{
         //category
-        if(text === fn.str['maincategory']) isvalid = true;
+        if(text === fn.mstr.category.maincategory) isvalid = true;
         else{
-            global.robot.categories.forEach(function(element) {
+            global.robot.category.forEach(function(element) {
                 if(element.name === text) 
                     isvalid = true;
             }, this);
@@ -30,23 +31,25 @@ var checkInValidCat = function(text, custom){
 
     return isvalid;
 }  
+
 var showRoot = function(message, speratedSection){
-    fn.userOper.setSection(message.from.id, fn.str.settingsItems.categories['name'] + '/' + fn.str['maincategory'], true);
-    showCategoryDir(message.from.id,fn.str['maincategory'], speratedSection);
+    fn.userOper.setSection(message.from.id, fn.mstr.category['name'] + '/' + fn.mstr.category.maincategory, true);
+    showCategoryDir(message.from.id, fn.mstr.category.maincategory, speratedSection);
 }
+
 //additional
 var showCategoryDir = function(userid,catname, speratedSection){
     var parent;
     //parent
-    if(catname === fn.str['maincategory']) parent = '';
+    if(catname === fn.mstr.category.maincategory) parent = '';
     else{
         for(var i =0; i<speratedSection.length; i++){
             if(speratedSection[i] === catname) parent = speratedSection[i-1];
         }
     }
 
-    var list = [fn.str.categoryoptions[0], fn.str.categoryoptions[1]];
-    var back = (catname === fn.str['maincategory']) ? fn.str.adminItems.settings['back'] : fn.str['backtoParent'] + ' از "' + catname + '" به ' + ' - ' + parent;
+    var list = [fn.mstr.category.categoryoptions[0], fn.mstr.category.categoryoptions[1]];
+    var back = (catname === fn.mstr.category.maincategory) ? fn.str.goToAdmin['back'] : fn.mstr.category['backtoParent'] + ' از "' + catname + '" به ' + ' - ' + parent;
 
     fn.db.category.find({'parent':catname}).exec((e, cats) => {
         if(cats && cats.length > 0) cats.forEach(function(element) { list.push(element.order + ' - ' + element.name); }, this);
@@ -54,6 +57,7 @@ var showCategoryDir = function(userid,catname, speratedSection){
         fn.generateKeyboard({'custom': true, 'grid':true, 'list': list, 'back':back}, false));                
     });
 }
+
 var createcategory = function(name, speratedSection, userid){
     //create new category
     var newcategory = new fn.db.category({
@@ -61,20 +65,21 @@ var createcategory = function(name, speratedSection, userid){
         'parent': speratedSection[speratedSection.length-2],
         'order':1,
     });
-    newcategory.save(() => {showCategoryDir(userid, newcategory.parent, speratedSection); get(); fn.getMainMenuItems();});
+    newcategory.save(() => {showCategoryDir(userid, newcategory.parent, speratedSection); global.fn.updateBotContent(); });
 }
+
 var deleteCategory = require('./delete');
 
 var createcategoryMess = function(userId, category, option){
     //create callback keyboard
     var detailArr = [];
     
-    var fn_name         = fn.str['queryCategory'] + '-' + fn.str['queryCategoryName'] + '-' + category._id;
-    var fn_parent       = fn.str['queryCategory'] + '-' + fn.str['queryCategoryParent'] + '-' + category._id;
-    var fn_description  = fn.str['queryCategory'] + '-' + fn.str['queryCategoryDescription'] + '-' + category._id;
-    var fn_delete       = fn.str['queryCategory'] + '-' + fn.str['queryDelete'] + '-' + category._id;
-    var fn_order        = fn.str['queryCategory'] + '-' + fn.str['queryOrder'] + '-' + category._id;    
-    var fn_close        = fn.str['queryCategory'] + '-close';
+    var fn_name         = fn.mstr.category['queryCategory'] + '-' + fn.mstr.category['queryCategoryName'] + '-' + category._id;
+    var fn_parent       = fn.mstr.category['queryCategory'] + '-' + fn.mstr.category['queryCategoryParent'] + '-' + category._id;
+    var fn_description  = fn.mstr.category['queryCategory'] + '-' + fn.mstr.category['queryCategoryDescription'] + '-' + category._id;
+    var fn_delete       = fn.mstr.category['queryCategory'] + '-' + fn.mstr.category['queryDelete'] + '-' + category._id;
+    var fn_order        = fn.mstr.category['queryCategory'] + '-' + fn.mstr.category['queryOrder'] + '-' + category._id;    
+    var fn_close        = fn.mstr.category['queryCategory'] + '-close';
     
     detailArr.push([ 
         {'text': 'دسته مادر', 'callback_data': fn_parent},
@@ -122,27 +127,18 @@ var editcategory = function(id, detail, userId, speratedSection, ecCallBack){
         fn.userOper.setSection(userId, fn.str.maincategory, true);
         if(category){
             if(detail.name) category.name = detail.name;
-            if(detail.parent){
-                category.parent = detail.parent;
-               
-            }
+            if(detail.parent) category.parent = detail.parent;
             if(detail.description) category.description = detail.description;
-            if(detail.order){
-                 category.order = detail.order;
-                 global.fn.getMainMenuItems();
-            }
+            if(detail.order) category.order = detail.order;
 
             category.save(() => {
-                global.robot.bot.sendMessage(userId, fn.str['seccess'], fn.generateKeyboard({section:fn.str['goTocategory']}));
-                
-                //get new categories
-                get(() => {
+                //get new category
+                global.fn.updateBotContent(() => {
                     createcategoryMess(userId, category);
-                    showCategoryDir(userId,fn.str.maincategory, speratedSection);  
+                    showCategoryDir(userId, category.parent, speratedSection); 
                 });
                               
-                if(ecCallBack) 
-                    ecCallBack();
+                if(ecCallBack) ecCallBack();
             });
         }
         else{
@@ -157,7 +153,7 @@ var routting = function(message, speratedSection){
     var last = speratedSection.length-1;
     var catname = (text.split(' - ')[1]) ? text.split(' - ')[1] : text;
     //show category root
-    if(text === fn.str.settingsItems.categories['name'] || text === fn.str.settingsItems.categories['back']){
+    if(text === fn.mstr.category['name'] || text === fn.mstr.category['back']){
         console.log('root gategory');
         showRoot(message, speratedSection);
     }
@@ -179,18 +175,18 @@ var routting = function(message, speratedSection){
     }
     
     //add new 
-    else if(text === fn.str.categoryoptions[1] && checkInValidCat(speratedSection[last])){
-        var mess = fn.str.categoryoptions[1];
+    else if(text === fn.mstr.category.categoryoptions[1] && checkInValidCat(speratedSection[last])){
+        var mess = fn.mstr.category.categoryoptions[1];
         var back = fn.str['back'] + ' - ' + speratedSection[last];
         
         fn.userOper.setSection(message.from.id, mess, true);        
         global.robot.bot.sendMessage(message.from.id, mess, fn.generateKeyboard({'section': back}, true));
     }
-    else if(speratedSection[last] === fn.str.categoryoptions[1]){
+    else if(speratedSection[last] === fn.mstr.category.categoryoptions[1]){
         var parent = speratedSection[last-2];
         var grandparent = speratedSection[last-3];
         console.log('create category', text);
-        if(checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.str.scErrors[2]);
+        if(checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.mstr.post.scErrors[2]);
         else if(fn.checkValidMessage(text)) global.robot.bot.sendMessage(message.from.id, fn.str['chooseOtherText']);
         else{
             fn.db.category.findOne({'name': text}).exec((e, category) => {
@@ -198,25 +194,25 @@ var routting = function(message, speratedSection){
                     fn.userOper.setSection(message.from.id, speratedSection[last-1], true);
                     createcategory(text, speratedSection, message.from.id);
                 }
-                else global.robot.bot.sendMessage(message.from.id, fn.str.scErrors[0]);
+                else global.robot.bot.sendMessage(message.from.id, fn.mstr.post.scErrors[0]);
             });
         }
     }
 
     //edit mode
-    else if(text === fn.str.categoryoptions[0] && checkInValidCat(speratedSection[last])){            
+    else if(text === fn.mstr.category.categoryoptions[0] && checkInValidCat(speratedSection[last])){            
         console.log('choose a category to delete');
         var catlist = [];
         deleteCategory.find({'parent': speratedSection[last]}).map((i) => { catlist.push(i.name) });
 
         if(catlist.length > 0){
             var back = fn.str['escapEdit'] + ' - ' + speratedSection[last];
-            fn.userOper.setSection(message.from.id, fn.str.categoryoptions[0], true);                    
+            fn.userOper.setSection(message.from.id, fn.mstr.category.categoryoptions[0], true);                    
             global.robot.bot.sendMessage(message.from.id, 'انتخاب کنید', fn.generateKeyboard({'custom': true, 'grid':true, 'list': catlist, 'back':back}, false));
         }
         else global.robot.bot.sendMessage(message.from.id, 'در اینجا گزینه ای برای ویرایش وجود ندارد.');
     }
-    else if(speratedSection[last] === fn.str.categoryoptions[0]){
+    else if(speratedSection[last] === fn.mstr.category.categoryoptions[0]){
         console.log('get deletting category');
         var catlist = [];
         deleteCategory.find({'parent': speratedSection[last-1]}).map((i) => { catlist.push(i.name) });
@@ -231,8 +227,8 @@ var routting = function(message, speratedSection){
     }
 
     //edit name
-    else if(speratedSection[last-1] === fn.str.editCategory['name']){
-        if(checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.str.scErrors[2]);
+    else if(speratedSection[last-1] === fn.mstr.category.edit['name']){
+        if(checkInValidCat(text)) global.robot.bot.sendMessage(message.from.id, fn.mstr.post.scErrors[2]);
         else if(fn.checkValidMessage(text)) global.robot.bot.sendMessage(message.from.id, fn.str['chooseOtherText']);
         else{
             fn.db.category.findOne({'_id': speratedSection[last]}).exec((e, category) => {
@@ -243,23 +239,23 @@ var routting = function(message, speratedSection){
     }
 
     //edit decription
-    else if (speratedSection[last-1] === fn.str.editCategory['description'])
+    else if (speratedSection[last-1] === fn.mstr.category.edit['description'])
         editcategory(speratedSection[last], {'description': text}, message.from.id, speratedSection);
 
     //edit parent
-    else if (speratedSection[last-1] === fn.str.editCategory['parent']){
+    else if (speratedSection[last-1] === fn.mstr.category.edit['parent']){
         var cat = text.split(' - ')[1];
-        if(fn.category.checkInValidCat(cat)){
+        if(fn.m.category.checkInValidCat(cat)){
             editcategory(speratedSection[last], {'parent': cat}, message.from.id, speratedSection);
         }else global.robot.bot.sendMessage(message.from.id, fn.str['choosethisItems']);
     }
 
     //edit order
-    else if(speratedSection[last-1] === fn.str.editCategory['order']){
+    else if(speratedSection[last-1] === fn.mstr.category.edit['order']){
         if(parseFloat(text) || text === 0) editcategory(speratedSection[last], {'order': text}, message.from.id, speratedSection);        
-        else global.robot.bot.sendMessage(message.from.id, fn.str.editCategory['order']);        
+        else global.robot.bot.sendMessage(message.from.id, fn.mstr.category.edit['order']);        
     }
 
 }
 
-module.exports = { get, routting, checkInValidCat }
+module.exports = { get, routting, checkInValidCat, deleteCategory }

@@ -1,7 +1,7 @@
 //find cats by name or parent
 var find = function(option){
     var matched = []
-    global.robot.categories.forEach(function(element) {
+    global.robot.category.forEach(function(element) {
         if(option.name && option.name === element.name) matched.push(element);
         else if(option.parent && option.parent === element.parent) matched.push(element);
     }, this);
@@ -43,7 +43,7 @@ var clear = function(name, call){
 
     //remove items
     fn.db.category.remove({}).$where(querystr).exec(() => {
-        fn.category.get();   //get new category list from db
+        fn.m.category.get();   //get new category list from db
         if(call) call();
     });
 }
