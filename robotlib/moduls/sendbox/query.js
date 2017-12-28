@@ -11,7 +11,7 @@ var sendmessage = function(userid, sendboxid){
                 if(users){
                     console.log('send mesage to found userd:', users.length);
                     users.forEach(function(user) {
-                        global.robot.bot.sendMessage(user.userId, messateText);
+                        global.fn.commands.backToMainMenu({'from':{'id':user.userId}}, user, messateText);
                     }, this);
 
                     var report = 'پیام ' + item.title + ' به ' + users.length + ' ارسال شد.';
