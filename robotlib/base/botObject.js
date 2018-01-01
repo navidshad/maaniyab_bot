@@ -17,7 +17,7 @@ module.exports = function(detail){
 
         //Message
         global.robot.bot.on('message', (msg) => {
-            console.log(msg.text);
+            console.log('id', msg.from.id, msg.text);
             global.messageRouting.analyze(msg);
         });
 

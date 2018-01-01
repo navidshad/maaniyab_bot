@@ -66,7 +66,7 @@ var editUser = function(userId,profile,ssCallBack){
 var checkProfile = function(id, callback){
     fn.db.user.findOne({'userId':id}).exec((e, user) => {
         if(user && callback) callback(user);
-        else return;
+        else if(callback) callback(null);
     });
 }
 
