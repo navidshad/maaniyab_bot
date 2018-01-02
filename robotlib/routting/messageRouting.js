@@ -16,7 +16,7 @@ var analyze = function(message){
             
             //sperate section
             var speratedSection = '';
-            if(user.section) speratedSection = user.section.split('/');
+            if(user && user.section) speratedSection = user.section.split('/');
             
             //go to meain menu
             if(message.text && message.text === fn.str['backToMenu']) fn.commands.backToMainMenu(message, user);
