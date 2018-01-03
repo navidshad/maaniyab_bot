@@ -13,15 +13,17 @@ var sendmessage = function(userid, sendboxid){
                     console.log('send mesage to found userd:', users.length);
                     users.forEach(function(user) {
                         global.fn.commands.backToMainMenu({'from':{'id':user.userId}}, user);
-                        global.robot.bot.sendMessage(userid, messateText).catch((error) => {
-                            console.log(error.code);  // => 'ETELEGRAM'
-                            console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+                        global.robot.bot.sendMessage(user.userId, messateText).catch((error) => {
+                            //console.log(error.code);  // => 'ETELEGRAM'
+                            //console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
                             if(error.response.statusCode === 403) blockCount += 1;
+                            console.log(error.response.statusCode);
+                            console.log('blockCount', blockCount);
                         });
                     }, this);
 
                     var report = 'پیام ' + item.title + ' به ' + users.length + ' ارسال شد.';
-                    report += '\n' + 'تعداد ' + blockCount + ' نفر هم ربات را بلاک کرده اند.';
+                    //report += '\n' + 'تعداد ' + blockCount + ' نفر هم ربات را بلاک کرده اند.';
                     global.robot.bot.sendMessage(userid, report);
                 }
                 else{
