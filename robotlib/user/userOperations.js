@@ -23,7 +23,6 @@ var registerId = function(id, flag, regCallback){
                 'dictype'   : fn.mstr.dictionary.btns.types['text']
             });
             //set invitor id
-            if(flag.invitor) newuser.invitorId = flag.invitor;
             newuser.save(() => {
                 console.log('user has been registered');
             });
@@ -34,7 +33,8 @@ var registerId = function(id, flag, regCallback){
             user.isCompelet = true;
             user.fullname = flag.fullname;
             user.username = flag.username;
-
+            user.dictype  = fn.mstr.dictionary.btns.types['text'];
+            
             if(user.isAdmin === true){
                 isAdmin = user.isAdmin;
             }

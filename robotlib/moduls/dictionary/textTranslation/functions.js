@@ -31,8 +31,8 @@ var getBtns = function(user){
     var fromDetail = getLanguageDetailByCode(user_from);
     var toDetail = getLanguageDetailByCode(user_to);
     //make buttns lable
-    var b_from = fn.mstr.dictionary.btns.from + fromDetail.lable + fromDetail.flag;
-    var b_to = fn.mstr.dictionary.btns.to + toDetail.lable + toDetail.flag;
+    var b_from = fn.mstr.dictionary.btns.from + fromDetail.lable + ' ' + fromDetail.flag;
+    var b_to = fn.mstr.dictionary.btns.to + toDetail.lable + ' ' + toDetail.flag;
     var b_switch = fn.mstr.dictionary.btns.switch;
     //return buttons
     return [[b_to, b_switch, b_from]];

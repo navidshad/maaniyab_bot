@@ -30,14 +30,36 @@ var showMessage = function(message){
         //find message
         fn.db.inbox.findOne({'date':date}, function(ee, item){
             if(item){
+                var detailArr = [];
+                var fn_answer = fn.mstr.inbox.query['inbox'] + '-' + fn.mstr.inbox.query['answer'] + '-' + item._id;
+                detailArr.push([ {'text': 'ارسال پاسخ', 'callback_data': fn_answer} ]);
+
                 inboxMess = 'پیام از طرف ' + '@' + item.username +
                 '\n' + 'ــــــــــــــــــــ' + '\n' + item.message + '\n \n @' + global.robot.username;
-                global.robot.bot.sendMessage(message.from.id, inboxMess);
+                global.robot.bot.sendMessage(message.from.id, inboxMess, {"reply_markup" : {"inline_keyboard" : detailArr}});
             }
             else{
                 global.robot.bot.sendMessage(message.from.id, 'این پیام دیگر موجود نیست');
             }
         });
+}
+
+var answertoMessage = function(message, messid){
+    fn.db.inbox.findOne({'date':date}, function(ee, item){
+        if(item){
+            answer = 'پیام شما:' + '\n';
+            answer += item.message + '\n \n';
+            answer += 'جواب پیام شما:' + '\n';
+            answer += message.text + '\n';
+            answer += '\n @' + global.robot.username;
+            global.robot.bot.sendMessage(message.from.id, answer);
+            global.robot.bot.sendMessage(item.userId, answer);
+            show(message);
+        }
+        else{
+            global.robot.bot.sendMessage(message.from.id, 'این پیام دیگر موجود نیست');
+        }
+    });
 }
 
 var deleteAll = function(message){
@@ -58,9 +80,20 @@ var routting = function(message, speratedSection){
     //setting
     else if(message.text === fn.mstr['inbox'].settings || speratedSection[3] === fn.mstr['inbox'].settings) 
         setting.routting(message, speratedSection);
-    
+
     //choose a message
-    else if(speratedSection[2] === fn.mstr['inbox'].name) showMessage(message);
+    else if(speratedSection[speratedSection.length-1] === fn.mstr['inbox'].name) showMessage(message);
+
+    //get answer
+    else if(speratedSection[speratedSection.length-2] === fn.mstr['inbox'].mess['answer']) answertoMessage(message, speratedSection[speratedSection.length-1]);
 }
 
-module.exports = {routting, show, user}
+var query = function(query, speratedQuery){
+    //answer
+    if(speratedQuery[1] === fn.mstr.inbox.query['answer']) {
+        fn.userOper.setSection(query.from.id, fn.str['mainMenu'] + '/' + fn.str.goToAdmin['name'] + '/' + fn.mstr['inbox'].name + '/' + fn.mstr.inbox.mess['answer'] + '/' + speratedQuery[speratedQuery.length-1], false);
+        global.robot.bot.sendMessage(query.from.id, fn.mstr.inbox.mess['answer'], fn.generateKeyboard({section:fn.mstr['inbox'].back}, true));
+    }
+}
+
+module.exports = {routting, query, show, user}
