@@ -1,5 +1,12 @@
-var gtranslate = require('./google_module');
-
+//get language detail
+var getLanglist = function(){
+    var list = [];
+    fn.mstr.dictionary.languages.forEach(lang => {
+      var langLable = lang.lable + fn.mstr.dictionary.dvider + lang.flag;
+      list.push(langLable);
+    });
+    return list;
+}
 var getLanguageDetailByCode = function(code) {
     detail = {};
     fn.mstr.dictionary.languages.forEach(element => { 
@@ -15,6 +22,7 @@ var getLanguageDetailByLable = function(lable) {
     return detail;
 }
 
+//option methods
 var getBtns = function(user){
     //get user langs
     var user_from = (user.textTranslation.from) ? user.textTranslation.from : 'fa'
@@ -25,45 +33,56 @@ var getBtns = function(user){
     //make buttns lable
     var b_from = fn.mstr.dictionary.btns.from + fromDetail.lable + fromDetail.flag;
     var b_to = fn.mstr.dictionary.btns.to + toDetail.lable + toDetail.flag;
+    var b_switch = fn.mstr.dictionary.btns.switch;
     //return buttons
-    return [b_to, b_from];
+    return [[b_to, b_switch, b_from]];
 }
-
-
-var translate = function(message){
-    fn.db.user.findOne({'userId': message.from.id}, 'userId diclang dictype').exec((e, user) => {
-        switch (user.dictype) {
-            case fn.mstr.dictionary.btns.types['word']:
-                wordTrans(user, message.text);
-                break;
-            case fn.mstr.dictionary.btns.types['text']:
-                googleTranslate(user, message.text);
-                break;
-        }
+var showLanguageList = function(userid, section){
+    var list = getLanglist();
+    back = fn.str['backToMenu'];
+    remarkup = fn.generateKeyboard({'custom': true, 'grid':true, 'list': list, 'back':back}, false);
+    global.robot.bot.sendMessage(userid, 'تغییر زبان', remarkup);
+    fn.userOper.setSection(userid, section, true);
+}
+var setLangOption = function(userid, text, section){
+  var setLangAs = (section === fn.mstr.dictionary.btns.from) ? 'from' : 'to';
+  var textTranslation = {};
+   if(fn.checkValidMessage(text, getLanglist())){
+      var langLable = text.split(fn.mstr.dictionary.dvider)[0];
+      textTranslation[setLangAs] = getLanguageDetailByLable(langLable).code;
+      fn.userOper.editUser(userid, {'textTranslation':textTranslation}, (user) => {
+        fn.commands.backToMainMenu({'from':{'id':user.userId}}, user, fn.str['seccess']);
+      });
+   } 
+  else global.robot.bot.sendMessage(userid, fn.str['choosethisItems']); 
+}
+var switchLang = function(user){
+    var from = (user.textTranslation.from) ? user.textTranslation.from : 'fa';
+    var to   = (user.textTranslation.to) ? user.textTranslation.to : 'en';
+    var textTranslation = {'from': to, 'to': from}
+    fn.userOper.editUser(user.userId, {'textTranslation':textTranslation}, (user) => {
+      fn.commands.backToMainMenu({'from':{'id':user.userId}}, user, fn.str['seccess']);
     });
 }
-var wordTrans = function(user,text){}
-var googleTranslate = function(user, text){
-    var langoptions = {
-        'fa': fn.mstr.dictionary.btns.to_en,
-        'en': fn.mstr.dictionary.btns.to_fa,
-    }
-    var from = (user.diclang === langoptions['en']) ? 'en' : 'fa';
-    var to   = (from === 'en') ? 'fa' : 'en';
+//translate methods
+var gtranslate = require('./google_module');
+var translate = function(user, text){
+    var from = (user.textTranslation.from) ? user.textTranslation.from : 'fa';
+    var to   = (user.textTranslation.to) ? user.textTranslation.to : 'en';
 
     gtranslate.get(text, null, from,to, (origintext, editedtext, fresult, sresult) => {
-        var mess = '🔹' + origintext + '\n';
+        var mess = '🔹' + getLanguageDetailByCode(from).flag + '\n' + origintext + '\n';
         
         mess += '--------------------------' + '\n';
         if(editedtext) {
-            mess += '🔸' + editedtext + '\n';
+            mess += '🔸' + getLanguageDetailByCode(from).flag + '\n' + editedtext + '\n';
             mess += '--------------------------' + '\n';
         }
 
-        mess += '🔹' + fresult + '\n';
+        mess += '🔹' + getLanguageDetailByCode(to).flag + '\n' + fresult + '\n';
         if(sresult) {
             mess += '--------------------------' + '\n';
-            mess += '🔸' + sresult + '\n';
+            mess += '🔸' + getLanguageDetailByCode(to).flag + '\n' + sresult + '\n';
         }
 
         mess += '@' + global.robot.username;
@@ -82,8 +101,26 @@ var googleTranslate = function(user, text){
     });
 }
 
-var routting = function(){
-    
+var routting = function(message, speratedSection, user){
+  //get text trnslation option buttons  
+  var optionBtns = getBtns(user)[0];
+  var text = message.text;
+  var last = speratedSection.length-1;
+  
+  //set from lang
+  if(text === optionBtns[2]) showLanguageList(message.from.id, fn.mstr.dictionary.btns.from);
+  else if(speratedSection[last] === fn.mstr.dictionary.btns.from) setLangOption(message.from.id, text, speratedSection[last]);
+  
+  //set to lang
+  else if(text === optionBtns[0]) showLanguageList(message.from.id, fn.mstr.dictionary.btns.to);
+  else if(speratedSection[last] === fn.mstr.dictionary.btns.to) setLangOption(message.from.id, text, speratedSection[last]);
+  
+  //switch language
+  else if (text === fn.mstr.dictionary.btns.switch) switchLang(user);
+  
+  //translate a text
+  else translate(user, text);
+ 
 }
 
-module.exports = { translate, getBtns }
+module.exports = { routting, getBtns }

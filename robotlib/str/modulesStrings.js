@@ -121,18 +121,19 @@ module.exports = {
                 text:'ترجمه متن',
             },
             from:'از ', 
-            to:'به ', 
+            to:'به ',
+            switch : '🔄'
         },
 
         languages : [
-            {lable :'اتوماتیک', flag:'', code:'auto'},
+            {lable :'اتوماتیک', flag:'🏴', code:'auto'},
             {lable :'فارسی', flag:'🇮🇷', code:'fa'},
-            {lable :'عربی', flag:'', code:'ar'},
-            {lable :'انگلیسی', flag:'', code:'en'},
-            {lable :'فرانسوی', flag:'', code:'fr'},
-            {lable :'آلمانی', flag:'', code:'de'},
-            {lable :'سوئدی', flag:'', code:'sv'},
-            {lable :'ترکی', flag:'', code:'tr'},
+            {lable :'عربی', flag:'🇮🇶', code:'ar'},
+            {lable :'انگلیسی', flag:'🇺🇸', code:'en'},
+            {lable :'فرانسوی', flag:'🇫🇷', code:'fr'},
+            {lable :'آلمانی', flag:'🇩🇪', code:'de'},
+            {lable :'سوئدی', flag:'🇸🇪', code:'sv'},
+            {lable :'ترکی', flag:'🇹🇷', code:'tr'},
         ],
 
         dvider:' ، ',

@@ -20,8 +20,7 @@ var registerId = function(id, flag, regCallback){
                 'section'   : fn.str['mainMenu'],
                 'isAdmin'   : isAdmin,
                 'isCompelet': true,
-                'diclang'   : fn.mstr.dictionary['to_en'],
-                'dictype'   : fn.mstr.dictionary['trans_text']
+                'dictype'   : fn.mstr.dictionary.btns.types['text']
             });
             //set invitor id
             if(flag.invitor) newuser.invitorId = flag.invitor;
@@ -55,6 +54,7 @@ var editUser = function(userId,profile,ssCallBack){
         if(profile.fullname) user.fullname = profile.fullname;
         if(profile.phone) user.phone = profile.phone;
         if(profile.textTranslation) {
+            console.log(profile);
             if(profile.textTranslation.from) user.textTranslation.from = profile.textTranslation.from;
             if(profile.textTranslation.to)   user.textTranslation.to   = profile.textTranslation.to;          
         } 

@@ -32,14 +32,14 @@ var registerAdmin = function(message){
 var backToMainMenu = function(message, user, mess){
     console.log('go to main menu');
     var items = global.robot.menuItems;
-
-    //inject dictionary btns
-    items = fn.m.dictionary.user.injectbuttons(items, user);
-
     fn.userOper.setSection(message.from.id, fn.str['mainMenu'], false);
-    remarkup = fn.generateKeyboard({section:fn.str['mainMenu'], 'list':items, "isCompelet": user.isCompelet, "isAdmin": user.isAdmin}, false);
+    var remarkup = fn.generateKeyboard({section:fn.str['mainMenu'], 'list':items, "isCompelet": user.isCompelet, "isAdmin": user.isAdmin}, false);
     var texttosend = (mess) ? mess : global.robot.confige.firstmessage;
     if(texttosend == null) texttosend = global.fn.str['mainMenuMess'];
+  
+    //inject dictionary btns
+    remarkup.reply_markup.keyboard = fn.m.dictionary.user.injectbuttons(remarkup.reply_markup.keyboard, user);
+
     global.robot.bot.sendMessage(message.from.id, texttosend, remarkup);
 }
 
