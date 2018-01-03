@@ -23,6 +23,6 @@ module.exports.send = function(detail){
     })
     .catch(function (err) {
         // Crawling failed...
-        console.log(err);
+        //console.log(err);
     });
 }

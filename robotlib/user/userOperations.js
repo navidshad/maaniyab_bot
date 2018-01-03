@@ -54,7 +54,10 @@ var editUser = function(userId,profile,ssCallBack){
         if(profile.isCompelet) user.isCompelet = true;
         if(profile.fullname) user.fullname = profile.fullname;
         if(profile.phone) user.phone = profile.phone;
-        if(profile.diclang) user.diclang = profile.diclang;
+        if(profile.textTranslation) {
+            if(profile.textTranslation.from) user.textTranslation.from = profile.textTranslation.from;
+            if(profile.textTranslation.to)   user.textTranslation.to   = profile.textTranslation.to;          
+        } 
         if(profile.dictype) user.dictype = profile.dictype;
         user.save((e) => { 
             if(e) console.log(e);

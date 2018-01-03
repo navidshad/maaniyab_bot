@@ -64,7 +64,7 @@ var showSendBoxsection = function(userid, txt){
         fn.mstr.sendMessage['sendMessToUsersNewMess']
     ]];
     
-    fn.db.sendbox.find({}, function(err, items){
+    fn.db.sendbox.find({}).sort('_id').exec(function(err, items){
         //make title list
         if(items.length > 0){
             items.forEach(function(element) {

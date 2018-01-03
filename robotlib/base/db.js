@@ -9,15 +9,15 @@ connection.once('open', function() { console.log('db was connected'); });
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-    userId      : Number,
-    username    : String,
-    isAdmin     : Boolean,
-    isCompelet  : Boolean,
-    fullname    : String,
-    phone       : Number,
-    section     : String,
-    diclang     : String,
-    dictype     : String,
+    userId          : Number,
+    username        : String,
+    isAdmin         : Boolean,
+    isCompelet      : Boolean,
+    fullname        : String,
+    phone           : Number,
+    section         : String,
+    textTranslation : {from: String, to:String},
+    dictype         : String,
 });
 
 var inboxSchema = new Schema({

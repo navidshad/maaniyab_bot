@@ -58,13 +58,13 @@ var checkValidMessage = function(text, custom){
     if(custom) {
         //console.log(custom);
         custom.forEach(function(element) {
-            if(element && text && element.toString().trim() === text.toString().trim()) isvalid = true;
+            if(element && text && element.toString().trim() === text.toString().trim()) 
+                isvalid = true;
         }, this);
     }
     else {
         global.fn.strArr.forEach(function(element) {
-        if(element.toString().trim() === text.toString().trim()) 
-            isvalid = true;
+            if(element.toString().trim() === text.toString().trim()) isvalid = true;
         }, this);
     }
     return isvalid;
