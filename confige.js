@@ -1,7 +1,7 @@
 module.exports = {
     //bot
     dbpath      :'mongodb://maaniyab:maaniyab131416@ds123926.mlab.com:23926/maaniyab_bot',
-    token       :'461784810:AAFZ2d04mFXXh7GSBfVSx7VOY2XmKOWVjhg',
+    //token       :'461784810:AAFZ2d04mFXXh7GSBfVSx7VOY2XmKOWVjhg',
     botusername :'maaniyab_bot',
     modules:{
         'settings'          :true,
@@ -14,5 +14,5 @@ module.exports = {
     },
     //web
     serverport:90,
-    //token       :'357787314:AAF6K-Tb7VnKM_SLZOUwCIa0zLaREp730r4', //test
+    token       :'357787314:AAF6K-Tb7VnKM_SLZOUwCIa0zLaREp730r4', //test
 }

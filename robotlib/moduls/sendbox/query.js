@@ -9,12 +9,19 @@ var sendmessage = function(userid, sendboxid){
             //find users
             global.fn.db.user.find({}).exec((er, users) => {
                 if(users){
+                    var blockCount = 0;
                     console.log('send mesage to found userd:', users.length);
                     users.forEach(function(user) {
-                        global.fn.commands.backToMainMenu({'from':{'id':user.userId}}, user, messateText);
+                        global.fn.commands.backToMainMenu({'from':{'id':user.userId}}, user);
+                        global.robot.bot.sendMessage(userid, messateText).catch((error) => {
+                            console.log(error.code);  // => 'ETELEGRAM'
+                            console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+                            if(error.response.statusCode === 403) blockCount += 1;
+                        });
                     }, this);
 
                     var report = 'پیام ' + item.title + ' به ' + users.length + ' ارسال شد.';
+                    report += '\n' + 'تعداد ' + blockCount + ' نفر هم ربات را بلاک کرده اند.';
                     global.robot.bot.sendMessage(userid, report);
                 }
                 else{

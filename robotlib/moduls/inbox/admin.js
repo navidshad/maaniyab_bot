@@ -1,7 +1,7 @@
 var show = function(message){
     console.log('got to inbox section');
     //get message list
-    fn.db.inbox.find({}, function(err, items){
+    fn.db.inbox.find({}).sort('-_id').exec(function(err, items){
         var titles = [[
             fn.mstr.inbox['inboxDeleteAll'],
             fn.mstr.inbox['settings']
@@ -53,7 +53,11 @@ var answertoMessage = function(message, messid){
             answer += message.text + '\n';
             answer += '\n @' + global.robot.username;
             global.robot.bot.sendMessage(message.from.id, answer);
-            global.robot.bot.sendMessage(item.userId, answer);
+            global.robot.bot.sendMessage(item.userId, answer).catch((error) => {
+                console.log(error.code);  // => 'ETELEGRAM'
+                console.log(error.response.body); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+                if(error.response.statusCode === 403) global.robot.bot.sendMessage(message.from.id, 'این کاربر ربات را block کرده است.'); 
+            });
             show(message);
         }
         else{
