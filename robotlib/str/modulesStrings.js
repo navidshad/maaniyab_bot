@@ -141,8 +141,13 @@ module.exports = {
             {lable :'انگلیسی', flag:'🇺🇸', code:'en'},
             {lable :'فرانسوی', flag:'🇫🇷', code:'fr'},
             {lable :'آلمانی', flag:'🇩🇪', code:'de'},
+            {lable :'روسی', flag:'🇷🇺', code:'ru'},
+            {lable :'چینی', flag:'🇨🇳', code:'zh-cn'},
             {lable :'سوئدی', flag:'🇸🇪', code:'sv'},
             {lable :'ترکی', flag:'🇹🇷', code:'tr'},
+            {lable :'ایتالیایی', flag:'🇮🇹', code:'it'},
+            {lable :'رومانی', flag:'🇷🇴', code:'ro'},
+            {lable :'صربی', flag:'🏳', code:'sr'},
         ],
 
         dvider:' ، ',
