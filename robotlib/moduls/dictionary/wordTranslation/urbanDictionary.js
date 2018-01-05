@@ -42,8 +42,16 @@ var translate = function(user, text){
         //copyright
         mess += '@' + global.robot.username;
         global.robot.bot.sendMessage(user.userId, mess, {parse_mode : "HTML"});
-        //global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId);
+        global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId, {parse_mode : "HTML"});
     });
+
+    //save phrase
+    var phrase = new fn.db.usecounter({
+        'userid' : user.userId,
+        'phrase': text,
+        'date': fn.time.gettime(),
+    });
+    phrase.save();
 }
 
 module.exports = { translate }
