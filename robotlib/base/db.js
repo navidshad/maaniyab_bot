@@ -17,6 +17,7 @@ var UserSchema = new Schema({
     phone           : Number,
     section         : String,
     textTranslation : {from: String, to:String},
+    wordTranslation : String,
     dictype         : String,
 });
 
@@ -39,13 +40,19 @@ var sendBoxSchema = new Schema({
 var ConfigSchema = new Schema({
   username      : String,
   collectorlink : String,
+  firstmessage  : String,
   modules :{
     'settings':Boolean,
     'ticket': Boolean,
     'contacttousers': Boolean,
-    'shop': Boolean
   },
-  moduleOptions:[{name:String, category:String, active: Boolean, button:String}]
+  moduleOptions:[{
+    name      :String, 
+    category  :String, 
+    active    :Boolean, 
+    button    :String,
+    otherdata :[{'name':String, 'data':String}]  //some data to be used by module
+  }]
 });
 
 var categorySchema = new Schema({

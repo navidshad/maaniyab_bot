@@ -6,7 +6,8 @@ var generateKeyboard    = require('./base/generateKeyboard.js');
 var time                = require('../moduls/time.js');
 var collector           = require('../moduls/collector');
 var fs                  = require('fs');
-var request             = require('request');
+var request_p           = require('request-promise');
+var striptags           = require('striptags');
 var path                = require('path');
 var commands            = require('./routting/commands');
 var freeStrings         = require('./routting/freeStrings');
@@ -137,6 +138,7 @@ var queryStringMaker = function(parameter, list, condition){
 
 var getModuleOption = function(name){
     var moduleOption = {};
+    if(!global.robot.confige.moduleOptions) global.robot.confige.moduleOptions = [];
     if(global.robot.confige.moduleOptions){
         global.robot.confige.moduleOptions.forEach(function(element, i) {
             if(element.name === name) { moduleOption = element; }
@@ -155,7 +157,7 @@ module.exports = {
     db, str, mstr, time, telegramBot, generateKeyboard, convertObjectToArray, commands,
     getMainMenuItems, getMenuItems, converAMenuItemsToArray, queryStringMaker,
     checkValidMessage, saveTelegramFile, collector, freeStrings, m,
-    updateBotContent, getModuleOption,
+    updateBotContent, getModuleOption, request_p, striptags,
     //user
     userOper, 
     //admin

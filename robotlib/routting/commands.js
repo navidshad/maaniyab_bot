@@ -34,7 +34,7 @@ var backToMainMenu = function(message, user, mess){
     var items = global.robot.menuItems;
     fn.userOper.setSection(message.from.id, fn.str['mainMenu'], false);
     var remarkup = fn.generateKeyboard({section:fn.str['mainMenu'], 'list':items, "isCompelet": user.isCompelet, "isAdmin": user.isAdmin}, false);
-    var texttosend = (mess) ? mess : global.robot.confige.firstmessage;
+    var texttosend = (mess) ? mess : fn.m.dictionary.user.getMainMenuMessaage(user);
     if(texttosend == null) texttosend = global.fn.str['mainMenuMess'];
   
     //inject dictionary btns

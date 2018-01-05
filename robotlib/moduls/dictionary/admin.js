@@ -1,4 +1,4 @@
-var show = function(userid, newcat){
+var show = function(userid, injectedText){
     var activationtext = '',
     moduleOption = {},
     index = null;
@@ -25,11 +25,25 @@ var show = function(userid, newcat){
     //save configuration
     global.robot.save();
 
-    var list = [fn.str.activation[activationtext]],
-    back = fn.str.goToAdmin['back'];
-    remarkup = fn.generateKeyboard({'custom': true, 'grid':true, 'list': list, 'back':back}, false);
-    global.robot.bot.sendMessage(userid, fn.mstr.dictionary['name'], remarkup);
+    var list = [
+        fn.str.activation[activationtext],
+        fn.mstr.dictionary.btns['textTranslationMess'],
+        fn.mstr.dictionary.btns['wordTranslationMess'],
+    ];
+
+    var back = fn.str.goToAdmin['back'];
+    var remarkup = fn.generateKeyboard({'custom': true, 'grid':true, 'list': list, 'back':back}, false);
+    var mess = (injectedText) ? injectedText : fn.mstr.dictionary['name'];
+    global.robot.bot.sendMessage(userid, mess, remarkup);
     fn.userOper.setSection(userid, fn.mstr.dictionary['name'], true);    
+}
+
+var setTextDescription = function(userid, flag){
+    var dictionaryModule = fn.getModuleOption('dictionary');
+    if(!dictionaryModule.otherdata) dictionaryModule.otherdata = [{},{}];
+    if(flag.textTranslationMess) dictionaryModule.otherdata[0] = {'name':'textTranslationMess', 'data':flag.textTranslationMess}
+    if(flag.wordTranslationMess) dictionaryModule.otherdata[1] = {'name':'wordTranslationMess', 'data':flag.wordTranslationMess}
+    show(userid, fn.str['seccess']);
 }
 
 var user = require('./user');
@@ -53,5 +67,23 @@ var routting = function(message, speratedSection){
         global.robot.save();
         show(message.from.id);
     }
+
+    //get text translation message
+    else if(text == fn.mstr.dictionary.btns['textTranslationMess']){
+        fn.userOper.setSection(message.from.id, fn.mstr.dictionary.btns['textTranslationMess'], true);
+        var replymarkup = fn.generateKeyboard({'section': fn.mstr.dictionary['back']}, true);
+        global.robot.bot.sendMessage(message.from.id, fn.mstr.dictionary.btns['textTranslationMess'], replymarkup);
+    }
+    else if(speratedSection[last] === fn.mstr.dictionary.btns['textTranslationMess'])
+        setTextDescription (message.from.id, {'textTranslationMess' : text});
+
+    //get word translation message
+    else if(text == fn.mstr.dictionary.btns['wordTranslationMess']){
+        fn.userOper.setSection(message.from.id, fn.mstr.dictionary.btns['wordTranslationMess'], true);
+        var replymarkup = fn.generateKeyboard({'section': fn.mstr.dictionary['back']}, true);
+        global.robot.bot.sendMessage(message.from.id, fn.mstr.dictionary.btns['wordTranslationMess'], replymarkup);
+    }
+    else if(speratedSection[last] === fn.mstr.dictionary.btns['wordTranslationMess'])
+        setTextDescription (message.from.id, {'wordTranslationMess' : text});
 }   
 module.exports = {routting, user}

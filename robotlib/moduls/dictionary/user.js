@@ -1,5 +1,5 @@
 var textTranslation = require('./textTranslation/functions');
-var wordTranslation = '';//require('');
+var wordTranslation = require('./wordTranslation/functions');//require('');
 
 var injectbuttons = function(items, user){
     //check activation of module
@@ -15,11 +15,23 @@ var injectbuttons = function(items, user){
             break;
     
         case fn.mstr.dictionary.btns.types['word']:
+            newitems = wordTranslation.getBtns(user);
             break;
     }
 
-    //newitems.push(fn.mstr.dictionary.btns['translateType']);
+    newitems.push([fn.mstr.dictionary.btns['translateType']]);
     return newitems.concat(items);    
+}
+
+var getMainMenuMessaage = function(user){
+    var dictionaryModule = fn.getModuleOption('dictionary');
+    var mess = global.robot.confige.firstmessage;
+    var dictionaryType = user.dictype;
+    if(dictionaryType === fn.mstr.dictionary.btns.types['text'] && dictionaryModule.otherdata) 
+        mess = dictionaryModule.otherdata[0].data;
+    else if(dictionaryType === fn.mstr.dictionary.btns.types['word'] && dictionaryModule.otherdata) 
+        mess = dictionaryModule.otherdata[1].data;
+    return mess;
 }
 
 var showOption = function(userid){
@@ -33,7 +45,7 @@ var setOption = function(userid, text){
     var availableLableOptions = [ fn.mstr.dictionary.btns.types['text'], fn.mstr.dictionary.btns.types['word'] ];
     if(fn.checkValidMessage(text, availableLableOptions)){
         fn.userOper.editUser(userid, {'dictype':text}, (user) => {
-            fn.commands.backToMainMenu({'from':{'id':user.userId}}, user, fn.str['seccess']);
+            fn.commands.backToMainMenu({'from':{'id':user.userId}}, user);
         });
     }
     else global.robot.bot.sendMessage(userid, fn.str['choosethisItems']);
@@ -48,7 +60,7 @@ var routting = function(message, speratedSection, user){
     else if(speratedSection[last] === fn.mstr.dictionary.btns.translateType) setOption(message.from.id, text);
     //type routting
     else if(user.dictype === fn.mstr.dictionary.btns.types['text']) textTranslation.routting(message, speratedSection, user);
-    else if(user.dictype === fn.mstr.dictionary.btns.types['word']){}
+    else if(user.dictype === fn.mstr.dictionary.btns.types['word']) wordTranslation.routting(message, speratedSection, user);
 }
 
-module.exports = { routting, injectbuttons }
+module.exports = { routting, injectbuttons, getMainMenuMessaage }

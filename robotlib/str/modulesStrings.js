@@ -122,16 +122,28 @@ module.exports = {
         modulename:'dictionary',
         name:'⚛️ ' + 'معنی یاب',
         back:'⤴️ برگش به معنی یاب',
+        
 
         btns : {
+            textTranslationMess :'پیام ترجمه متن',
+            wordTranslationMess :'پیام ترجمه لغت',
+            //user
             translateType : '🎛 ' + 'تغییر نوع ترجمه',
             types : {
                 word:'ترجمه لغت', 
                 text:'ترجمه متن',
             },
+            wordTransType : {
+                simple : {l: 'ساده', k:'simple'}, //lable , key
+                premium: {l: 'حرفه ای', k:'premium'}
+            },
             from:'از ', 
             to:'به ',
             switch : '🔄'
+        },
+
+        mess : {
+            notfound: 'متاسفانه هیچ معنی برای واژه شما پیدا نکردم 😔 لطفا واژه دیگری رو به من ارسال کن.',
         },
 
         languages : [

@@ -33,7 +33,6 @@ var registerId = function(id, flag, regCallback){
             user.isCompelet = true;
             user.fullname = flag.fullname;
             user.username = flag.username;
-            user.dictype  = fn.mstr.dictionary.btns.types['text'];
             
             if(user.isAdmin === true){
                 isAdmin = user.isAdmin;
@@ -58,10 +57,11 @@ var editUser = function(userId,profile,ssCallBack){
             if(profile.textTranslation.from) user.textTranslation.from = profile.textTranslation.from;
             if(profile.textTranslation.to)   user.textTranslation.to   = profile.textTranslation.to;          
         } 
+        if(profile.wordTranslation) user.wordTranslation = profile.wordTranslation;
         if(profile.dictype) user.dictype = profile.dictype;
-        user.save((e) => { 
+        user.save((e, saved) => { 
             if(e) console.log(e);
-            if(ssCallBack) ssCallBack(user); 
+            if(ssCallBack) ssCallBack(saved); 
         });
     });
 }
