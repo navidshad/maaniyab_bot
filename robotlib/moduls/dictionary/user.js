@@ -17,6 +17,10 @@ var injectbuttons = function(items, user){
         case fn.mstr.dictionary.btns.types['word']:
             newitems = wordTranslation.getBtns(user);
             break;
+
+        default:
+            newitems = textTranslation.getBtns(user);
+            break;
     }
 
     newitems.push([fn.mstr.dictionary.btns['translateType']]);
