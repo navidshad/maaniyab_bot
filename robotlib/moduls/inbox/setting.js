@@ -25,6 +25,7 @@ var show = function(userid, newcat){
     //defin new category
     if(newcat) {
         moduleOption.category = newcat;
+        moduleOption.button = fn.mstr.inbox['lable'];
         global.robot.confige.moduleOptions[index] = moduleOption;
     }
     //save configuration
