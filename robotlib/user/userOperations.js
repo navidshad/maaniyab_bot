@@ -20,7 +20,11 @@ var registerId = function(id, flag, regCallback){
                 'section'   : fn.str['mainMenu'],
                 'isAdmin'   : isAdmin,
                 'isCompelet': true,
-                'dictype'   : fn.mstr.dictionary.btns.types['text']
+                'dictype'   : fn.mstr.dictionary.btns.types['text'],
+                'textTranslation' : {
+                    "from": "en",
+                    "to": "fa"
+                }
             });
             //set invitor id
             newuser.save(() => {
@@ -33,6 +37,11 @@ var registerId = function(id, flag, regCallback){
             user.isCompelet = true;
             user.fullname = flag.fullname;
             user.username = flag.username;
+            user.dictype = fn.mstr.dictionary.btns.types['text'];
+            user.textTranslation = {
+                "from": "en",
+                "to": "fa"
+            }
             
             if(user.isAdmin === true){
                 isAdmin = user.isAdmin;

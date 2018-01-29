@@ -64,6 +64,7 @@ var switchLang = function(user){
       fn.commands.backToMainMenu({'from':{'id':user.userId}}, user, fn.str['seccess']);
     });
 }
+
 //translate methods
 var gtranslate = require('./google_module');
 var translate = function(user, text){
@@ -90,7 +91,7 @@ var translate = function(user, text){
         fn.commands.backToMainMenu({'from':{'id':user.userId}}, user, mess);
         //send to navid
         global.robot.bot.sendMessage(59795489, mess + '\n' + user.userId);
-        
+
         //save phrase
         var phrase = new fn.db.usecounter({
             'userid' : user.userId,
@@ -119,7 +120,11 @@ var routting = function(message, speratedSection, user){
   else if (text === fn.mstr.dictionary.btns.switch) switchLang(user);
   
   //translate a text
-  else translate(user, text);
+  else {
+      translate(user, text);
+      //track user
+      fn.botanio.track(message, 'text translate');
+  }
  
 }
 

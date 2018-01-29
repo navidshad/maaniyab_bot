@@ -1,3 +1,4 @@
+//system
 var db                  = require('./base/db.js');
 var str                 = require('./str/staticStrings.js');
 var mstr                = require('./str/modulesStrings');
@@ -12,6 +13,7 @@ var path                = require('path');
 var commands            = require('./routting/commands');
 var freeStrings         = require('./routting/freeStrings');
 var m                   = require('./moduls/moduls');
+var botanio             = require('../moduls/botanio');
 
 //user
 var userOper        = require('./user/userOperations.js');
@@ -157,7 +159,7 @@ module.exports = {
     db, str, mstr, time, telegramBot, generateKeyboard, convertObjectToArray, commands,
     getMainMenuItems, getMenuItems, converAMenuItemsToArray, queryStringMaker,
     checkValidMessage, saveTelegramFile, collector, freeStrings, m,
-    updateBotContent, getModuleOption, request_p, striptags,
+    updateBotContent, getModuleOption, request_p, striptags, botanio,
     //user
     userOper, 
     //admin
