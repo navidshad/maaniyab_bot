@@ -65,6 +65,16 @@ var routting = function(message, speratedSection, user){
     //type routting
     else if(user.dictype === fn.mstr.dictionary.btns.types['text']) textTranslation.routting(message, speratedSection, user);
     else if(user.dictype === fn.mstr.dictionary.btns.types['word']) wordTranslation.routting(message, speratedSection, user);
+
+    fn.googleAnalytic.trackevent({
+        't':'event',
+        'tid':'',
+        'cid':'',
+        'ec':'translate',
+        'ea':'multy',
+        'el':'test',
+        'ev':'300',
+    });
 }
 
 module.exports = { routting, injectbuttons, getMainMenuMessaage }

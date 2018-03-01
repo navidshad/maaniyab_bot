@@ -22,4 +22,7 @@ module.exports = {
 
     //botanio statistic
     yandexKey           :'18681d5a-50a2-485b-a43d-efb1a78d0e9e',
+
+    //google analytic
+    g_trackingID : 'UA-113123995-1',
 }

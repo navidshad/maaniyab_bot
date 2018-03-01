@@ -146,9 +146,11 @@ module.exports = {
             notfound: 'متاسفانه هیچ معنی برای واژه شما پیدا نکردم 😔 لطفا واژه دیگری رو به من ارسال کن.',
         },
 
+        //https://github.com/matheuss/google-translate-api/blob/master/languages.js
         languages : [
             {lable :'اتوماتیک', flag:'🏴', code:'auto'},
             {lable :'فارسی', flag:'🇮🇷', code:'fa'},
+            {lable :'کردی کرمانجی', flag:'🇭🇺', code:'ku'},
             {lable :'عربی', flag:'🇮🇶', code:'ar'},
             {lable :'انگلیسی', flag:'🇺🇸', code:'en'},
             {lable :'فرانسوی', flag:'🇫🇷', code:'fr'},
@@ -160,6 +162,8 @@ module.exports = {
             {lable :'ایتالیایی', flag:'🇮🇹', code:'it'},
             {lable :'رومانی', flag:'🇷🇴', code:'ro'},
             {lable :'صربی', flag:'🏳', code:'sr'},
+            {lable :'هندی', flag:'🇮🇳', code:'hi'},
+            {lable :'ایرلندی', flag:'🇮🇪', code:'ga'},
         ],
 
         dvider:' ، ',

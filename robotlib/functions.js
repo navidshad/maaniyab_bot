@@ -14,6 +14,7 @@ var commands            = require('./routting/commands');
 var freeStrings         = require('./routting/freeStrings');
 var m                   = require('./moduls/moduls');
 var botanio             = require('../moduls/botanio');
+var googleAnalytic      = require('../moduls/googleAnalytics');
 
 //user
 var userOper        = require('./user/userOperations.js');
@@ -159,7 +160,7 @@ module.exports = {
     db, str, mstr, time, telegramBot, generateKeyboard, convertObjectToArray, commands,
     getMainMenuItems, getMenuItems, converAMenuItemsToArray, queryStringMaker,
     checkValidMessage, saveTelegramFile, collector, freeStrings, m,
-    updateBotContent, getModuleOption, request_p, striptags, botanio,
+    updateBotContent, getModuleOption, request_p, striptags, botanio, googleAnalytic,
     //user
     userOper, 
     //admin
